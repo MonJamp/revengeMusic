@@ -1,9 +1,11 @@
-#include <SFML/Audio.hpp>
-#include <SFML/System.hpp>
 #include <string>
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
+
+//FMOD sound API headers
+#include <fmod.hpp>
+#include "fmod_errors.h"
 
 //standard unix headers, need this to get present working directory
 #include <unistd.h>
@@ -29,11 +31,10 @@ int main( int argc, char *argv[]){
     std::string slash = "/";
     std::string arg = argv[ 1];
 
-    //the music object
-    sf::Music music;
+
 
     //if music at PATH is not found then exit program
-    if(!music.openFromFile( cwd + slash + arg)){
+    if( cwd + slash + arg)){
 
       std::cout<< "File -" + arg + "- Not Found in " + cwd;
       return -1;
@@ -41,11 +42,11 @@ int main( int argc, char *argv[]){
 
       //play music after outputting message
       std::cout<< "Playing file -" + arg + "- @ " + cwd <<std::endl;
-      music.play();
+
 
       ///TO-DO: switch to duration to stop music
       //while music is not over, might want to slow this down later too
-      while(!sf::Music::Status::Stopped){
+      while(){
 
         //will be implementing IPC here
 
