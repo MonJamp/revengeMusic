@@ -1,8 +1,9 @@
 #include "Sound.h"
 
-//constructor for sound class initialises the modules
+//constructor for sound class initialises FMOD
 Sound::Sound(){
 
+  // Create FMOD interface object and error check
   if( FMOD::System_Create( &m_pSystem) != FMOD_OK){
 
     std::cout<< "Could not create sound system." <<std::endl;
@@ -24,24 +25,25 @@ Sound::Sound(){
 }
 
 //loads sound in path to memory
-void Sound::createSound( SoundClass *psound, const char* pFile) {
+void Sound::createSound( const char *pFile) {
 
-  m_pSystem->createSound( pFile, FMOD_HARDWARE, 0, psound);
+  m_pSystem->createStream( pFile, FMOD_DEFAULT, 0, &audio);
 }
 
-void Sound::playSound( SoundClass pSound, bool bLoop = false){
+void Sound::playSound( bool bLoop = false){
 
       if ( !bLoop)
-         pSound->setMode(FMOD_LOOP_OFF);
+         audio->setMode(FMOD_LOOP_OFF);
       else{
 
-         pSound->setMode(FMOD_LOOP_NORMAL);
-         pSound->setLoopCount(-1);
+         audio->setMode(FMOD_LOOP_NORMAL);
+         audio->setLoopCount(-1);
       }
 
-      m_pSystem->playSound( FMOD_CHANNEL_FREE, pSound, false, 0);
+      m_pSystem->playSound( audio, 0, false, 0);
    }
 
-   void Sound::releaseSound(SoundClass pSound){
-      pSound->release();
+   void Sound::releaseSound(){
+
+      audio->release();
    }

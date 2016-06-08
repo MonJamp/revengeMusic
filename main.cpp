@@ -37,32 +37,23 @@ int main( int argc, char *argv[]){
     std::string slash = "/";
     std::string arg = argv[ 1];
 
-    //if music at PATH is not found then exit program
-    if( true){
+    //play music after outputting message
+    std::cout<< "Playing file -" + arg + "- @ " + cwd <<std::endl;
 
-      std::cout<< "File -" + arg + "- Not Found in " + cwd;
-      return -1;
-    }else{
+    song.createSound( argv[1]);
+    song.playSound( true);
 
-      //play music after outputting message
-      std::cout<< "Playing file -" + arg + "- @ " + cwd <<std::endl;
-
-
-
-      ///TO-DO: switch to duration to stop music
-      //while music is not over, might want to slow this down later too
-      while(true){
+    //while music is not over, might want to slow this down later too
+    while(true){
 
         //will be implementing IPC here
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often
         //sf::sleep(sf::milliseconds(1000));
-      }
-      std::cout<< arg + "stopped" <<std::endl;
-   }
+    }
 
-
+    std::cout<< arg + "stopped" <<std::endl;
     return 0;
    }else{
 
