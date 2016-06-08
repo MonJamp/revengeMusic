@@ -1,4 +1,4 @@
-#include <Sound.h>
+#include "Sound.h"
 
 //constructor for sound class initialises the modules
 Sound::Sound(){
@@ -29,17 +29,17 @@ void Sound::createSound( SoundClass *psound, const char* pFile) {
   m_pSystem->createSound( pFile, FMOD_HARDWARE, 0, psound);
 }
 
-void Sound::playSound(SoundClass pSound, bool bLoop = false){
+void Sound::playSound( SoundClass pSound, bool bLoop = false){
 
-      if (!bLoop)
+      if ( !bLoop)
          pSound->setMode(FMOD_LOOP_OFF);
-      else
-      {
+      else{
+
          pSound->setMode(FMOD_LOOP_NORMAL);
          pSound->setLoopCount(-1);
       }
 
-      m_pSystem->playSound(FMOD_CHANNEL_FREE, pSound, false, 0);
+      m_pSystem->playSound( FMOD_CHANNEL_FREE, pSound, false, 0);
    }
 
    void Sound::releaseSound(SoundClass pSound){
