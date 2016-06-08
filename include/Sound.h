@@ -1,11 +1,27 @@
+#ifndef SOUND_H
+#define SOUND_H
+
+#include <string>
+#include <iostream>
+
 //FMOD sound API headers
 #include <fmod.hpp>
-#include "fmod_errors.h"
 
 typedef FMOD::Sound* SoundClass;
 
 class Sound{
 
+public:
+
   FMOD::System *m_pSystem;
-  Sound(){}
+
+  Sound();
+
+  void createSound( SoundClass, const char* );
+
+  void playSound( SoundClass, bool);
+
+  void releaseSound( SoundClass);
 };
+
+#endif

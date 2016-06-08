@@ -7,10 +7,16 @@
 #include <fmod.hpp>
 #include "fmod_errors.h"
 
+//sound class include
+#include "Sound.h"
+
 //standard unix headers, need this to get present working directory
 #include <unistd.h>
 
 int main( int argc, char *argv[]){
+
+  //create sound object
+  Sound song;
 
  //checks if args have been put in correctly
  if( argc == 2){
@@ -31,10 +37,8 @@ int main( int argc, char *argv[]){
     std::string slash = "/";
     std::string arg = argv[ 1];
 
-
-
     //if music at PATH is not found then exit program
-    if( cwd + slash + arg)){
+    if( true){
 
       std::cout<< "File -" + arg + "- Not Found in " + cwd;
       return -1;
@@ -44,15 +48,16 @@ int main( int argc, char *argv[]){
       std::cout<< "Playing file -" + arg + "- @ " + cwd <<std::endl;
 
 
+
       ///TO-DO: switch to duration to stop music
       //while music is not over, might want to slow this down later too
-      while(){
+      while(true){
 
         //will be implementing IPC here
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often
-        sf::sleep(sf::milliseconds(1000));
+        //sf::sleep(sf::milliseconds(1000));
       }
       std::cout<< arg + "stopped" <<std::endl;
    }
