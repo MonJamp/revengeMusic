@@ -6,22 +6,25 @@
 
 //FMOD sound API headers
 #include <fmod.hpp>
-
-typedef FMOD::Sound* SoundClass;
+#include "fmod_errors.h"
 
 class Sound{
 
 public:
 
+  //audio object
+  FMOD::Sound *audio;
+
+  // Create FMOD interface object
   FMOD::System *m_pSystem;
 
   Sound();
 
-  void createSound( SoundClass, const char* );
+  void createSound( const char*);
 
-  void playSound( SoundClass, bool);
+  void playSound( bool);
 
-  void releaseSound( SoundClass);
+  void releaseSound();
 };
 
 #endif
