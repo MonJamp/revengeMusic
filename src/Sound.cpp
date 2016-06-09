@@ -30,7 +30,7 @@ void Sound::createSound( const char *pFile) {
   m_pSystem->createStream( pFile, FMOD_DEFAULT, 0, &audio);
 }
 
-void Sound::playSound( bool bLoop = false){
+void Sound::playSound( bool bLoop){
 
       if ( !bLoop)
          audio->setMode(FMOD_LOOP_OFF);
@@ -40,10 +40,18 @@ void Sound::playSound( bool bLoop = false){
          audio->setLoopCount(-1);
       }
 
-      m_pSystem->playSound( audio, 0, false, 0);
+      playing = m_pSystem->playSound( audio, 0, false, &channel);
    }
 
-   void Sound::releaseSound(){
+bool Sound::isPlaying(){
 
-      audio->release();
-   }
+  //polls the channel to check if music has stopped
+  channel->isPlaying( &playing);
+
+  return playing;
+}
+
+void Sound::releaseSound(){
+
+  audio->release();
+}
