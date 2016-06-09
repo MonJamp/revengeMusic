@@ -12,6 +12,12 @@ class Sound{
 
 public:
 
+  bool playing;
+
+  FMOD_RESULT result;
+
+  FMOD::Channel *channel = NULL;
+
   //audio object
   FMOD::Sound *audio;
 
@@ -23,6 +29,8 @@ public:
   void createSound( const char*);
 
   void playSound( bool);
+
+  bool isPlaying();
 
   void releaseSound();
 };
