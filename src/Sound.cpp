@@ -10,7 +10,7 @@ Sound::Sound(){
     return;
   }
 
-  //gets all drivers for error checking
+  //checks drivers
   int driverCount = 0;
   m_pSystem->getNumDrivers( &driverCount);
 
@@ -33,11 +33,11 @@ void Sound::createSound( const char *pFile) {
 void Sound::playSound( bool bLoop){
 
       if ( !bLoop)
-         audio->setMode(FMOD_LOOP_OFF);
+         audio->setMode( FMOD_LOOP_OFF);
       else{
 
-         audio->setMode(FMOD_LOOP_NORMAL);
-         audio->setLoopCount(-1);
+         audio->setMode( FMOD_LOOP_NORMAL);
+         audio->setLoopCount( -1);
       }
 
       playing = m_pSystem->playSound( audio, 0, false, &channel);

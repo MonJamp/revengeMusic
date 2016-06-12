@@ -8,8 +8,9 @@
 #include <fmod.hpp>
 #include "fmod_errors.h"
 
-//sound class include
+//sound and IPC class include
 #include "Sound.h"
+#include "IPC.h"
 
 //standard unix headers, need this to get present working directory
 #include <unistd.h>
@@ -24,6 +25,9 @@ int main( int argc, char *argv[]){
 
   //create sound object
   Sound song;
+
+  //IPC object
+  IPC ipc;
 
   //checks if args have been put in correctly
   if( argc == 2){
@@ -53,7 +57,7 @@ int main( int argc, char *argv[]){
     //while music is not over, might want to slow this down later too
     while( song.isPlaying()){
 
-        //will be implementing IPC here
+        //will listen for IPC calls here
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often, this function sleeps for 1 second
