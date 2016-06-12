@@ -29,8 +29,9 @@ int main( int argc, char *argv[]){
   //IPC object
   IPC ipc;
 
-  //checks if args have been put in correctly
-  if( argc == 2){
+  //checks if args have been put in correctly and this instance is the music
+  //program or just passing the music a message
+  if( argc == 2 && ipc.IPCOriginal()){
 
     //this block gets the present working directory and builds the path to
     //the track
@@ -57,19 +58,48 @@ int main( int argc, char *argv[]){
     //while music is not over, might want to slow this down later too
     while( song.isPlaying()){
 
-        //will listen for IPC calls here
+          //will listen for IPC calls and process them here
+          if( ipc.IPCGet() == "kill" ) {
+
+              //output something so I know it got the message
+              std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
+              song.playing = false;
+          }
+        }
+
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often, this function sleeps for 1 second
         sleep( 1);
     }
 
-    std::cout<< track + " finished, closing." <<std::endl;
+    std::cout<< track + " stopped, closing." <<std::endl;
     return 0;
-   }else{
 
-     //will output a list of commands when is completed
-     std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
-     return 0;
+  //in this case the instance of  the program is just going to send a message
+  //and then exit
+  if( argc == 2 && !ipc.IPCOriginal()){
+
+    //sends the message and exits the program
+    ipc.IPCSend( argv[1]);
+    return 0;
+  }else{
+
+    //if no argument, or one that is not a recognised command
+    //is passed to this instande and an original instance is allready running
+    //then send the kill command to shut the ptogram down
+    if( !ipc.IPCOriginal()){
+
+        std::string kill = "kill";
+        ipc.IPCSend( kill.c_str());
+
+    //else the program was called with bad arguments or without any
+    //displaying notes on working commands
+    }else{
+
+      //will output a list of commands when is completed
+      std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
+    }
+    return 0;
   }
 }

@@ -42,6 +42,9 @@ class IPC{
 
     //listens for an incomming message and returns it
     std::string IPCGet();
+
+    //shuts down the IPC functionality, this way fifos and pid files dont stay open
+    void IPCClose();
 };
 
 #endif
