@@ -19,7 +19,7 @@ bool IPC::IPCOriginal(){
 }
 
 //sends a message to the original process
-void IPC::IPCSend( char buf[]){
+void IPC::IPCSend( const char buf[]){
 
   mkfifo( fifo, 0666);
 
@@ -37,4 +37,9 @@ std::string IPC::IPCGet(){
 
   if(message[0] != '\0')
     return std::string( message);
+}
+
+void IPC::IPCClose(){
+
+  close( pidfile);
 }

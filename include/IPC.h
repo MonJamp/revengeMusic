@@ -27,7 +27,7 @@ class IPC{
     //creating a large char array with nothing on it to recieve messages on
     char message[MAX_BUF] = {""};
 
-    //this can determine if the program is the original process or rinning a message
+    //this can determine if the program is the original process or running a message
     //to the original process
     int pidfile;
 
@@ -38,7 +38,7 @@ class IPC{
     bool IPCOriginal();
 
     //sends a message to the original process
-    void IPCSend( char[]);
+    void IPCSend( const char[]);
 
     //listens for an incomming message and returns it
     std::string IPCGet();
