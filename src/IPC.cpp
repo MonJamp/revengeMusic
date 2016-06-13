@@ -4,7 +4,7 @@
 //the pid file so only one process runs
 bool IPC::IPCOriginal(){
 
-   pidfile = open("revengeMusic.pid", O_CREAT | O_RDONLY);
+   pidfile = open(".revengeMusic.pid", O_CREAT | O_RDONLY);
 
    rc = flock(pidfile, LOCK_EX | LOCK_NB);
 
