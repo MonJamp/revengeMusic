@@ -1,42 +1,57 @@
 #include <IPC.h>
 
-//returns true if the program is the original process
+//returns true if the program is the original process, also initialises
+//the pid file so only one process runs
 bool IPC::IPCOriginal(){
 
-  char buf[MAX_BUF] = {""};
+   pidfile = open("revengeMusic.pid", O_CREAT | O_RDONLY);
 
-  pidfile = open("revengeMusic.pid", O_CREAT | O_RDONLY);
+   rc = flock(pidfile, LOCK_EX | LOCK_NB);
 
-  rc = flock(pidfile, LOCK_EX | LOCK_NB);
-
-  if( rc != 0){
-
-    return false;
-  }else{
-
-    return true;
-  }
+   if( rc == 0){
+     std::cout << "original" << std::endl;
+     return true;
+   }else{
+     std::cout << "second process or messed up commands" << std::endl;
+     return false;
+   }
 }
 
 //sends a message to the original process
 void IPC::IPCSend( const char buf[]){
 
-  mkfifo( fifo, 0666);
+  if( rc){
+
+   mkfifo( fifo, 0666);
 
    fd = open( fifo, O_WRONLY);
    write( fd, buf, sizeof(buf));
    close( fd);
+ }else{
+
+   std::cout << "cannot write to read only fifo." << std::endl;
+ }
 }
 
 //listens for an incomming message and returns it
 std::string IPC::IPCGet(){
 
-  fd = open( fifo, O_RDONLY);
-  read( fd, message, MAX_BUF);
-  close( fd);
+    if( rc == 0){
 
-  if(message[0] != '\0')
-    return std::string( message);
+      fd = open( fifo, O_RDONLY);
+      read(fd, message, MAX_BUF);
+      std::cout << message << std::endl;
+
+      close( fd);
+
+      if( message[0] != '\0'){
+
+        return std::string( message);
+      }
+    }else{
+
+      std::cout << "cannot read from write only fifo." << std::endl;
+    }
 }
 
 void IPC::IPCClose(){

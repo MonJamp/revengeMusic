@@ -25,7 +25,7 @@ class IPC{
     int fd;
 
     //creating a large char array with nothing on it to recieve messages on
-    char message[MAX_BUF] = {""};
+    char message[MAX_BUF] = {"kill"};
 
     //this can determine if the program is the original process or running a message
     //to the original process
