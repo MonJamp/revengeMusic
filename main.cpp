@@ -29,6 +29,13 @@ int main( int argc, char *argv[]){
   //IPC object
   IPC ipc;
 
+  //flag that is required to be true for the program to not exit immediatley
+  bool running = true;
+
+  //the kill command, is the signal to shut the running program down
+  //an improved IPC class will be a lot tidier
+  std::string kill = "kill";
+
   //checks if args have been put in correctly and this instance is the music
   //program or just passing the music a message
   if( argc == 2 && ipc.IPCOriginal()){
@@ -56,21 +63,21 @@ int main( int argc, char *argv[]){
     song.playSound( false);
 
     //while music is not over, might want to slow this down later too
-    while( song.isPlaying()){
+    while( song.isPlaying() && running){
+
 
           //will listen for IPC calls and process them here
           if( ipc.IPCGet() == "kill" ) {
 
               //output something so I know it got the message
               std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
-              song.playing = false;
+              running = false;
           }
-        }
-
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often, this function sleeps for 1 second
         sleep( 1);
+
     }
 
     std::cout<< track + " stopped, closing." <<std::endl;
@@ -79,9 +86,9 @@ int main( int argc, char *argv[]){
 
   //in this case the instance of  the program is just going to send a message
   //and then exit
-  if( argc == 2 && !ipc.IPCOriginal()){
+  }else if( argc == 2 && !ipc.IPCOriginal()){
 
-    //sends the message and exits the program
+    //sends the message that was in args and exits the program
     ipc.IPCSend( argv[1]);
     ipc.IPCClose();
     return 0;
@@ -92,7 +99,6 @@ int main( int argc, char *argv[]){
     //then send the kill command to shut the ptogram down
     if( !ipc.IPCOriginal()){
 
-        std::string kill = "kill";
         ipc.IPCSend( kill.c_str());
 
     //else the program was called with bad arguments or without any
