@@ -70,7 +70,7 @@ int main( int argc, char *argv[]){
           if( ipc.IPCGet() == "kill" ) {
 
               //output something so I know it got the message
-              std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
+              std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
               running = false;
           }
 
@@ -89,7 +89,8 @@ int main( int argc, char *argv[]){
   }else if( argc == 2 && !ipc.IPCOriginal()){
 
     //sends the message that was in args and exits the program
-    ipc.IPCSend( argv[1]);
+    ///FOR NOW SIMPLY KILLS THE PROGRAM
+    ipc.IPCSend( kill.c_str());
     ipc.IPCClose();
     return 0;
   }else{
