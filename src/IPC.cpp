@@ -9,6 +9,10 @@ bool IPC::IPCOriginal(){
    rc = flock(pidfile, LOCK_EX | LOCK_NB);
 
    if( rc == 0){
+
+     //makes a fifo file for communicating between processes
+    mkfifo( fifo, 0666);
+
      //std::cout << "original" << std::endl;
      return true;
    }else{
@@ -21,8 +25,6 @@ bool IPC::IPCOriginal(){
 void IPC::IPCSend( const char buf[]){
 
   if( rc){
-
-   mkfifo( fifo, 0666);
 
    fd = open( fifo, O_WRONLY);
    write( fd, buf, sizeof(buf));
