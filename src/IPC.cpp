@@ -9,10 +9,10 @@ bool IPC::IPCOriginal(){
    rc = flock(pidfile, LOCK_EX | LOCK_NB);
 
    if( rc == 0){
-     std::cout << "original" << std::endl;
+     //std::cout << "original" << std::endl;
      return true;
    }else{
-     std::cout << "second process or messed up commands" << std::endl;
+     std::cout << "~";
      return false;
    }
 }
@@ -27,6 +27,7 @@ void IPC::IPCSend( const char buf[]){
    fd = open( fifo, O_WRONLY);
    write( fd, buf, sizeof(buf));
    close( fd);
+
  }else{
 
    std::cout << "cannot write to read only fifo." << std::endl;
@@ -54,6 +55,7 @@ std::string IPC::IPCGet(){
     }
 }
 
+//maje sure every thing is closed
 void IPC::IPCClose(){
 
   close( pidfile);
