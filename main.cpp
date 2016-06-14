@@ -14,6 +14,8 @@
 
 //standard unix headers, need this to get present working directory
 #include <unistd.h>
+#include <pwd.h>
+#include <sys/types.h>
 
 int main( int argc, char *argv[]){
 
@@ -42,19 +44,29 @@ int main( int argc, char *argv[]){
 
     //this block gets the present working directory and builds the path to
     //the track
-    char cwd[1024];
-    if ( getcwd(cwd, sizeof(cwd)) != NULL){
+    const char* cwd;
 
+    if ((cwd = getenv("HOME")) == NULL)  {
+
+      cwd = getpwuid(getuid())->pw_dir;
       track = argv[1];
       PATH = cwd;
-      PATH += "/../../Music/";
+      PATH += "/Music/";
       PATH += track;
 
     //returns an error and quits program
-    }else{
+  }else if( cwd != NULL){
 
-       perror("error getting present working directory");
-       return -1;
+    track = argv[1];
+    PATH = cwd;
+    PATH += "/Music/";
+    PATH += track;
+
+    std::cout << PATH << std::endl;
+  }else{
+
+      perror("error getting present working directory");
+      return 0;
     }
 
     //create then play music after outputting message

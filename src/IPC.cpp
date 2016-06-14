@@ -1,5 +1,15 @@
 #include <IPC.h>
 
+IPC::IPC(){
+
+  //set fifo to home directory if it is available otherwise get the home directory
+  //of the user
+  if ((fifo = getenv("HOME")) == NULL) {
+
+    fifo = getpwuid(getuid())->pw_dir;
+  }
+}
+
 //returns true if the program is the original process, also initialises
 //the pid file so only one process runs
 bool IPC::IPCOriginal(){
@@ -16,6 +26,7 @@ bool IPC::IPCOriginal(){
      //std::cout << "original" << std::endl;
      return true;
    }else{
+
      std::cout << "~";
      return false;
    }

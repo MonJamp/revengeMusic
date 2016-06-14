@@ -2,6 +2,8 @@
 #define IPC_H
 
 #include <fcntl.h>
+#include <pwd.h>
+#include <sys/types.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/file.h>
@@ -15,8 +17,11 @@ class IPC{
 
   public:
 
+    //constructor sets home directory for fifo
+    IPC();
+
     //named pipe
-    const char* fifo = "/tmp/fifo";
+    const char* fifo;
 
     //quit flag
     bool quit = false;
