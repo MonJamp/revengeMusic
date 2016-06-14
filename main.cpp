@@ -25,12 +25,6 @@ int main( int argc, char *argv[]){
   //this string will make up the path to "/Music" directory
   std::string PATH;
 
-  //create sound object
-  Sound song;
-
-  //IPC object
-  IPC ipc;
-
   //flag that is required to be true for the program to not exit immediatley
   bool running = true;
 
@@ -38,58 +32,63 @@ int main( int argc, char *argv[]){
   //an improved IPC class will be a lot tidier
   std::string kill = "kill";
 
-  //checks if args have been put in correctly and this instance is the music
-  //program or just passing the music a message
-  if( argc == 2 && ipc.IPCOriginal()){
+  //this block gets the present working directory and builds the path to
+  //the track
+  const char* cwd;
 
-    //this block gets the present working directory and builds the path to
-    //the track
-    const char* cwd;
+  //this block gets the directory the user is using for the program
+  if ((cwd = getenv("HOME")) == NULL)  {
 
-    if ((cwd = getenv("HOME")) == NULL)  {
+    cwd = getpwuid(getuid())->pw_dir;
+    track = argv[1];
+    PATH = cwd;
 
-      cwd = getpwuid(getuid())->pw_dir;
-      track = argv[1];
-      PATH = cwd;
-      PATH += "/Music/";
-      PATH += track;
-
-    //returns an error and quits program
+  //returns an error and quits program
   }else if( cwd != NULL){
 
     track = argv[1];
     PATH = cwd;
-    PATH += "/Music/";
-    PATH += track;
 
     std::cout << PATH << std::endl;
   }else{
 
       perror("error getting present working directory");
       return 0;
-    }
+  }
+
+  //create sound object and initialise it to PATH
+  Sound song;
+
+  //create and initialise IPC object
+  IPC ipc( "/tmp/" + PATH);
+
+  //checks if args have been put in correctly and this instance is the music
+  //program or just passing the music a message
+  if( argc == 2 && ipc.IPCOriginal()){
+
+    //the path was needed for the IPC object but the path now needs the track
+    //to be appended to the file to create a path to the music
+    PATH += ( "/Music/" + track);
 
     //create then play music after outputting message
     std::cout<< "Playing file -" + track <<std::endl;
     song.createSound( PATH.c_str());
     song.playSound( false);
 
-    //while music is not over, might want to slow this down later too
-    while( song.isPlaying() && running){
+  //while music is not over, might want to slow this down later too
+  while( song.isPlaying() && running){
 
+    //will listen for IPC calls and process them here
+    if( ipc.IPCGet() == "kill" ) {
 
-          //will listen for IPC calls and process them here
-          if( ipc.IPCGet() == "kill" ) {
-
-              //output something so I know it got the message
-              std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
-              running = false;
-          }
+      //output something so I know it got the message
+      std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
+      running = false;
+    }
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often, this function sleeps for 1 second
         sleep( 1);
-
     }
 
     std::cout<< track + " stopped, closing." <<std::endl;

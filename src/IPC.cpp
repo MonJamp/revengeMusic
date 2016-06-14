@@ -1,27 +1,28 @@
 #include <IPC.h>
 
-IPC::IPC(){
+IPC::IPC( std::string _location){
 
-  //set fifo to home directory if it is available otherwise get the home directory
-  //of the user
-  if ((fifo = getenv("HOME")) == NULL) {
+  //set fifo to home directory and check if there is allready a
+  //fifo type file there
+  fifo = _location.c_str();
 
-    fifo = getpwuid(getuid())->pw_dir;
-  }
+  std::string path = _location;
+
+  path += ".revengeMusic.pid";
+
+  pidfile = open( path.c_str(), O_CREAT | O_RDONLY);
 }
 
 //returns true if the program is the original process, also initialises
 //the pid file so only one process runs
 bool IPC::IPCOriginal(){
 
-   pidfile = open(".revengeMusic.pid", O_CREAT | O_RDONLY);
-
-   rc = flock(pidfile, LOCK_EX | LOCK_NB);
+   rc = flock( pidfile, LOCK_EX | LOCK_NB);
 
    if( rc == 0){
 
      //makes a fifo file for communicating between processes
-    mkfifo( fifo, 0666);
+     mkfifo( fifo, 0666);
 
      //std::cout << "original" << std::endl;
      return true;
