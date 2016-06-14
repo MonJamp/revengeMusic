@@ -21,10 +21,7 @@ bool IPC::IPCOriginal(){
 
    if( rc == 0){
 
-     //makes a fifo file for communicating between processes
-     mkfifo( fifo, 0666);
-
-     //std::cout << "original" << std::endl;
+     std::cout << "original" << std::endl;
      return true;
    }else{
 
@@ -38,9 +35,11 @@ void IPC::IPCSend( const char buf[]){
 
   if( rc){
 
-   fd = open( fifo, O_WRONLY);
-   write( fd, buf, sizeof(buf));
-   close( fd);
+     mkfifo( fifo, 0666);
+
+     fd = open( fifo, O_WRONLY );
+     write( fd, buf, sizeof(buf));
+     close( fd);
 
  }else{
 
@@ -53,14 +52,14 @@ std::string IPC::IPCGet(){
 
     if( rc == 0){
 
-      fd = open( fifo, O_RDONLY);
+      mkfifo( fifo, 0666 );
+
+      fd = open( fifo, O_RDONLY );
       read(fd, message, MAX_BUF);
       std::cout << message << std::endl;
-
       close( fd);
 
       if( message[0] != '\0'){
-
         return std::string( message);
       }
     }else{

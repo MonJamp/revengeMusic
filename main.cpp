@@ -49,7 +49,6 @@ int main( int argc, char *argv[]){
     track = argv[1];
     PATH = cwd;
 
-    std::cout << PATH << std::endl;
   }else{
 
       perror("error getting present working directory");
@@ -60,7 +59,7 @@ int main( int argc, char *argv[]){
   Sound song;
 
   //create and initialise IPC object
-  IPC ipc( "/tmp/" + PATH);
+  IPC ipc( PATH + "/tmp/");
 
   //checks if args have been put in correctly and this instance is the music
   //program or just passing the music a message
