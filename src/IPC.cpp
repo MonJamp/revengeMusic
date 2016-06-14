@@ -8,9 +8,11 @@ IPC::IPC( std::string _location){
 
   std::string path = _location;
 
-  path += ".revengeMusic.pid";
+  path += "revengeMusic.pid";
 
   pidfile = open( path.c_str(), O_CREAT | O_RDONLY);
+
+  mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
 }
 
 //returns true if the program is the original process, also initialises
@@ -21,12 +23,11 @@ bool IPC::IPCOriginal(){
 
    if( rc == 0){
 
-     std::cout << "original" << std::endl;
+     //std::cout << "original" << std::endl;
      return true;
    }else{
 
-     std::cout << "~";
-     return false;
+      return false;
    }
 }
 
@@ -35,11 +36,12 @@ void IPC::IPCSend( const char buf[]){
 
   if( rc){
 
-     mkfifo( fifo, 0666);
-
-     fd = open( fifo, O_WRONLY );
+      close( fd);
+     fd = open( fifo, O_WRONLY);
      write( fd, buf, sizeof(buf));
      close( fd);
+
+    perror("FML");
 
  }else{
 
@@ -52,16 +54,18 @@ std::string IPC::IPCGet(){
 
     if( rc == 0){
 
-      mkfifo( fifo, 0666 );
-
-      fd = open( fifo, O_RDONLY );
+        close( fd);
+      fd = open( fifo, O_RDONLY);
       read(fd, message, MAX_BUF);
       std::cout << message << std::endl;
       close( fd);
 
       if( message[0] != '\0'){
+
         return std::string( message);
       }
+
+      perror("FML");
     }else{
 
       std::cout << "cannot read from write only fifo." << std::endl;

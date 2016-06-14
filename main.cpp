@@ -59,7 +59,7 @@ int main( int argc, char *argv[]){
   Sound song;
 
   //create and initialise IPC object
-  IPC ipc( PATH + "/tmp/");
+  IPC ipc( PATH + "/tmp/fifo");
 
   //checks if args have been put in correctly and this instance is the music
   //program or just passing the music a message
