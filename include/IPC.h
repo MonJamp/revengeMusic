@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#include <cstring>
 #include <unistd.h>
 #include <iostream>
 #include <errno.h>
@@ -18,7 +19,7 @@ class IPC{
   public:
 
     //constructor sets home directory for fifo
-    IPC();
+    IPC( std::string);
 
     //named pipe
     const char* fifo;
