@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <iostream>
 #include <cstring>
+#include <stdlib.h>
 
 //FMOD sound API headers
 #include <fmod.hpp>
