@@ -1,16 +1,13 @@
 #include "Sound.h"
 
-//constructor for sound class initialises FMOD
 Sound::Sound(){
 
-  // Create FMOD interface object and error check
   if( FMOD::System_Create( &m_pSystem) != FMOD_OK){
 
     std::cout<< "Could not create sound system." <<std::endl;
     return;
   }
 
-  //checks drivers
   int driverCount = 0;
   m_pSystem->getNumDrivers( &driverCount);
 
