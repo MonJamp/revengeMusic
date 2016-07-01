@@ -42,7 +42,7 @@ void IPC::IPCSend( const char buf[]){
 
       close( fd);
      fd = open( fifo, O_WRONLY);
-     write( fd, buf, sizeof(buf));
+     write( fd, buf, MAX_BUF);
      close( fd);
 
     perror("FML");
