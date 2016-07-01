@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <iostream>
 #include <cstring>
+#include <stdlib.h>
 
 //FMOD sound API headers
 #include <fmod.hpp>
@@ -37,19 +38,13 @@ int main( int argc, char *argv[]){
   const char* cwd;
 
   //this block gets the directory the user is using for the program
-  if ((cwd = getenv("HOME")) == NULL)  {
-
+  if ((cwd = getenv("HOME")) != NULL && argv[1] != NULL)  {
     cwd = getpwuid(getuid())->pw_dir;
     track = argv[1];
     PATH = cwd;
 
   //returns an error and quits program
-  }else if( cwd != NULL){
-
-    track = argv[1];
-    PATH = cwd;
-
-  }else{
+  } else {
 
       perror("error getting present working directory");
       return 0;
