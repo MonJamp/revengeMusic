@@ -1,4 +1,5 @@
 #include <IPC.h>
+#include <cstring>
 
 IPC::IPC( std::string _location){
 
@@ -13,6 +14,9 @@ IPC::IPC( std::string _location){
   pidfile = open( path.c_str(), O_CREAT | O_RDONLY);
 
   mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
+
+  quit = false;
+  std::memset(message, ' ', MAX_BUF);
 }
 
 //returns true if the program is the original process, also initialises
