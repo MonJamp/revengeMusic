@@ -19,8 +19,8 @@ IPC::IPC( std::string _location){
   std::memset(message, ' ', MAX_BUF);
 }
 
-//returns true if the program is the original process, also initialises
-//the pid file so only one process runs
+//returns true if there is no other instance, also locks
+//the pid file to detect if there is already an instance running
 bool IPC::IPCOriginal(){
 
    rc = flock( pidfile, LOCK_EX | LOCK_NB);
@@ -53,7 +53,6 @@ void IPC::IPCSend( const char buf[]){
  }
 }
 
-//listens for an incomming message and returns it
 std::string IPC::IPCGet(){
 
     if( rc == 0){
