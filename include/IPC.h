@@ -21,20 +21,14 @@ class IPC{
     //constructor sets home directory for fifo
     IPC( std::string);
 
-    //named pipe
-    const char* fifo;
-
-    //quit flag
+    const char* fifo; //named pipe
     bool quit;
+    int fd; //file descriptor
 
-    //file descriptor
-    int fd;
-
-    //creating a large char array with nothing on it to recieve messages on
+    //Used to receive messages
     char message[MAX_BUF];
 
-    //this can determine if the program is the original process or running a message
-    //to the original process
+    //this can determine if the program is the only instance
     int pidfile;
 
     //returns 0 if the process isnt 'flock'ed
