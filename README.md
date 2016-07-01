@@ -10,8 +10,10 @@ best case scenario is to mod rofi to play music files
     - You need to register before downloading
     - Install the low level apis to /usr/lib
     - Extract FMOD to the project root directory
+
 ## Compiling
 Make sure the FMOD libraries are included and libraries are linked in `build.sh`. Then run `./build.sh`
+
 ## Usage
 ```
 ./revengeMusic (--commands | <path>)
