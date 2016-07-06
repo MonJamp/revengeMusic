@@ -30,7 +30,7 @@ int main( int argc, char *argv[]){
 
     cwd = getpwuid(getuid())->pw_dir;
     track = argv[1];
-    PATH = cwd;
+    music_dir = cwd;
   } else {
       perror("error getting present working directory");
       return 0;
@@ -38,15 +38,15 @@ int main( int argc, char *argv[]){
 
   Sound song;
 
-  IPC ipc( PATH + "/tmp/fifo");
+  IPC ipc( music_dir + "/tmp/fifo");
 
   //Checks if this the only instance
   if( argc == 2 && ipc.IPCOriginal()){
 
-    PATH += ( "/Music/" + track);
+    music_dir += ( "/Music/" + track);
 
     std::cout<< "Playing file -" + track <<std::endl;
-    song.createSound( PATH.c_str());
+    song.createSound( music_dir.c_str());
     song.playSound( false);
 
     std::cout<< "Program is running"<<std::endl;
