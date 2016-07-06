@@ -23,16 +23,12 @@ class IPC{
 
     const char* fifo; //named pipe
     bool quit;
-    int fd; //file descriptor
 
     //Used to receive messages
     char message[MAX_BUF];
 
     //this can determine if the program is the only instance
     int pidfile;
-
-    //returns 0 if the process isnt 'flock'ed
-    int rc;
 
     //returns true if the program is the original process
     bool IPCOriginal();
