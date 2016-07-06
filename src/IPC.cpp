@@ -16,6 +16,7 @@ IPC::IPC( std::string _location){
   mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
 
   quit = false;
+  
   std::memset(message, ' ', MAX_BUF);
 }
 
@@ -31,44 +32,43 @@ bool IPC::IPCOriginal(){
      return true;
    }else{
 
-      return false;
+     //std::cout << "secondary" << std::endl;
+     return false;
    }
 }
 
 //sends a message to the original process
 void IPC::IPCSend( const char buf[]){
 
-  if( rc){
+  //if( rc){
 
-      close( fd);
      fd = open( fifo, O_WRONLY);
      write( fd, buf, MAX_BUF);
      close( fd);
 
-    perror("FML");
+     // }else{
 
- }else{
-
-   std::cout << "cannot write to read only fifo." << std::endl;
- }
+     //   std::cout << "cannot write to read only fifo." << std::endl;
+     // }
 }
 
 std::string IPC::IPCGet(){
 
-    if( rc == 0){
-
-        close( fd);
+  // if( rc == 0){
+    
       fd = open( fifo, O_RDONLY);
-      read(fd, message, MAX_BUF);
-      std::cout << message << std::endl;
+      read( fd, message, MAX_BUF);
       close( fd);
-
+      
       if( message[0] != '\0'){
 
         return std::string( message);
-      }
+	//   }else{
 
-      perror("FML");
+	//	std::cout<<"message buffer empty"<<std::endl;
+	
+	// }
+
     }else{
 
       std::cout << "cannot read from write only fifo." << std::endl;
@@ -78,5 +78,6 @@ std::string IPC::IPCGet(){
 //maje sure every thing is closed
 void IPC::IPCClose(){
 
+  std::cout<<"Closing IPC"<<std::endl;
   close( pidfile);
 }

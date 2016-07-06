@@ -27,6 +27,7 @@ int main( int argc, char *argv[]){
 
   //Gets the Home directory of the user
   if ((cwd = getenv("HOME")) != NULL && argv[1] != NULL)  {
+
     cwd = getpwuid(getuid())->pw_dir;
     track = argv[1];
     PATH = cwd;
@@ -48,7 +49,10 @@ int main( int argc, char *argv[]){
     song.createSound( PATH.c_str());
     song.playSound( false);
 
-  //Might want to slow this down later too
+    std::cout<< "Program is running"<<std::endl;
+
+    
+  //might want to slow this down later too
   while( song.isPlaying() && running){
 
     //will listen for IPC calls and process them here
@@ -57,7 +61,7 @@ int main( int argc, char *argv[]){
       running = false;
     }
 
-    sleep( 1);
+    sleep( 10);
   }
 
     std::cout<< track + " stopped, closing." <<std::endl;
@@ -76,17 +80,18 @@ int main( int argc, char *argv[]){
 
     //if no argument, or one that is not a recognised command
     //is passed to this instande and an original instance is allready running
-    //then send the kill command to shut the ptogram down
+    //then send the kill command to shut the original program down
     if( !ipc.IPCOriginal()){
 
         ipc.IPCSend( kill.c_str());
+	std::cout<< kill.c_str();
 
     //else the program was called with bad arguments or without any
     //displaying notes on working commands
     }else{
 
-      //will output a list of commands when is completed
-      std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
+     //will output a list of commands when is completed
+     std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
     }
 
     ipc.IPCClose();
