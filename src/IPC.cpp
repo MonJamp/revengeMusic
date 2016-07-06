@@ -1,7 +1,7 @@
 #include <IPC.h>
 #include <cstring>
 
-IPC::IPC(std::string fifo_dir) {
+IPC::IPC(const char* fifo_dir) {
 
     //set fifo to home directory and check if there is allready a
     //fifo type file there
@@ -38,7 +38,7 @@ bool IPC::isOnlyInstance() {
 void IPC::SendMessage(const char* msg) {
 
      int fd = open(fifo, O_WRONLY);
-     write(fd, buf, MAX_BUF);
+     write(fd, message, MAX_BUF);
      close(fd);
 }
 
