@@ -19,7 +19,7 @@ class IPC{
   public:
 
     //constructor sets home directory for fifo
-    IPC( std::string);
+    IPC(std::string);
     ~IPC();
 
     const char* fifo; //named pipe
@@ -32,10 +32,10 @@ class IPC{
     bool isOnlyInstance();
 
     //sends a message to the original process
-    void IPCSend( const char[]);
+    void SendMessage(const char* msg);
 
     //listens for an incomming message and returns it
-    std::string IPCGet();
+    std::string GetMessage();
 
   private:
     bool onlyInstance;

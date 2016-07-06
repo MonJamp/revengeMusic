@@ -34,31 +34,23 @@ bool IPC::isOnlyInstance(){
   return onlyInstance;
 }
 
-//sends a message to the original process
-void IPC::IPCSend( const char buf[]){
+//sends a message to the fifo
+void IPC::SendMessage( const char buf[]){
 
      int fd = open( fifo, O_WRONLY);
      write( fd, buf, MAX_BUF);
      close( fd);
 }
 
-std::string IPC::IPCGet(){
+std::string IPC::GetMessage(){
     
-      int fd = open( fifo, O_RDONLY);
-      read( fd, message, MAX_BUF);
-      close( fd);
-      
-      if( message[0] != '\0'){
+    int fd = open( fifo, O_RDONLY);
+    read( fd, message, MAX_BUF);
+    close( fd);
 
-        return std::string( message);
-	//   }else{
-
-	//	std::cout<<"message buffer empty"<<std::endl;
-	
-	// }
-
-    }else{
-
+    if( message[0] != '\0'){
+      return std::string(message);
+    } else {
       std::cout << "cannot read from write only fifo." << std::endl;
     }
 }
