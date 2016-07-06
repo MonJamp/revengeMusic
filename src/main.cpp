@@ -56,7 +56,7 @@ int main( int argc, char *argv[]){
   while( song.isPlaying() && running){
 
     //will listen for IPC calls and process them here
-    if( ipc.IPCGet() == "kill" ) {
+    if( ipc.GetMessage() == "kill" ) {
       std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
       running = false;
     }
@@ -72,7 +72,7 @@ int main( int argc, char *argv[]){
 
     //sends the message that was in args
     ///FOR NOW SIMPLY KILLS THE PROGRAM
-    ipc.IPCSend( kill.c_str());
+    ipc.SendMessage( kill.c_str());
     delete(&ipc);
     return 0;
   }else{
@@ -82,7 +82,7 @@ int main( int argc, char *argv[]){
     //then send the kill command to shut the original program down
     if( !ipc.isOnlyInstance()){
 
-        ipc.IPCSend( kill.c_str());
+        ipc.SendMessage( kill.c_str());
 	std::cout<< kill.c_str();
 
     //else the program was called with bad arguments or without any
