@@ -24,7 +24,7 @@ IPC::IPC( std::string _location){
 //the pid file to detect if there is already an instance running
 bool IPC::IPCOriginal(){
 
-   rc = flock( pidfile, LOCK_EX | LOCK_NB);
+   int rc = flock( pidfile, LOCK_EX | LOCK_NB);
 
    if( rc == 0){
 
@@ -42,7 +42,7 @@ void IPC::IPCSend( const char buf[]){
 
   //if( rc){
 
-     fd = open( fifo, O_WRONLY);
+     int fd = open( fifo, O_WRONLY);
      write( fd, buf, MAX_BUF);
      close( fd);
 
@@ -56,7 +56,7 @@ std::string IPC::IPCGet(){
 
   // if( rc == 0){
     
-      fd = open( fifo, O_RDONLY);
+      int fd = open( fifo, O_RDONLY);
       read( fd, message, MAX_BUF);
       close( fd);
       
