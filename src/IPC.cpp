@@ -1,5 +1,10 @@
 #include <IPC.h>
+#include <sys/stat.h>
+#include <sys/file.h>
+#include <unistd.h>
 #include <cstring>
+#include <string>
+#include <iostream>
 
 IPC::IPC(const char* fifo_dir) {
 
