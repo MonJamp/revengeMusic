@@ -38,7 +38,7 @@ int main( int argc, char *argv[]){
 
   Sound song;
 
-  IPC ipc( music_dir + "/tmp/fifo");
+  IPC ipc("/tmp/fifo");
 
   //Checks if this the only instance
   if( argc == 2 && ipc.IPCOriginal()){
