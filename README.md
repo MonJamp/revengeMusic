@@ -25,5 +25,3 @@ Make sure the FMOD libraries are included and libraries are linked in `build.sh`
     commands:
         -h, --help      Shows this message
 ```
-
-

@@ -60,7 +60,6 @@ int main( int argc, char *argv[]){
       std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
       running = false;
     }
-
     sleep( 10);
   }
 
