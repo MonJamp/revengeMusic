@@ -33,21 +33,12 @@ bool IPC::isOnlyInstance(){
 //sends a message to the original process
 void IPC::IPCSend( const char buf[]){
 
-  //if( rc){
-
      int fd = open( fifo, O_WRONLY);
      write( fd, buf, MAX_BUF);
      close( fd);
-
-     // }else{
-
-     //   std::cout << "cannot write to read only fifo." << std::endl;
-     // }
 }
 
 std::string IPC::IPCGet(){
-
-  // if( rc == 0){
     
       int fd = open( fifo, O_RDONLY);
       read( fd, message, MAX_BUF);
