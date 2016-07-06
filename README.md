@@ -1,6 +1,11 @@
 # revengeMusic
-A command line music program for linux, presently its just a prototype so I can practice system programming; the idea is 
-to make it work well with i3 window manager how ever it may go on to have a gui like rofi.
+
+Written in C++
+
+A command line music program for linux,
+Designed not to play two tracks at once and to be easily used in shell programs, this way key shortcuts and option flags
+could allow a user to find a creative uses, I intend to release a gui mode and sound file search and create a music program with
+similar implementation to rofi.
 
 best case scenario is to mod rofi to play music files
 
@@ -20,3 +25,5 @@ Make sure the FMOD libraries are included and libraries are linked in `build.sh`
     commands:
         -h, --help      Shows this message
 ```
+
+
