@@ -21,8 +21,6 @@ IPC::IPC(std::string fifo_dir) {
 
     mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
 
-    quit = false;
-
     std::memset(message, ' ', MAX_BUF);
 }
 
