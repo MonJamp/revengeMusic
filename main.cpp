@@ -39,6 +39,7 @@ int main( int argc, char *argv[]){
 
   //this block gets the directory the user is using for the program
   if ((cwd = getenv("HOME")) != NULL && argv[1] != NULL)  {
+
     cwd = getpwuid(getuid())->pw_dir;
     track = argv[1];
     PATH = cwd;
@@ -56,8 +57,7 @@ int main( int argc, char *argv[]){
   //create and initialise IPC object
   IPC ipc( PATH + "/tmp/fifo");
 
-  //checks if args have been put in correctly and this instance is the music
-  //program or just passing the music a message
+  //checks if this instance is the original program or just passing a message
   if( argc == 2 && ipc.IPCOriginal()){
 
     //the path was needed for the IPC object but the path now needs the track
@@ -69,6 +69,9 @@ int main( int argc, char *argv[]){
     song.createSound( PATH.c_str());
     song.playSound( false);
 
+    std::cout<< "Program is running"<<std::endl;
+
+    
   //while music is not over, might want to slow this down later too
   while( song.isPlaying() && running){
 
@@ -82,7 +85,7 @@ int main( int argc, char *argv[]){
 
         //if this thread is to simply sit and spin then it had better not do too
         //mutch too often, this function sleeps for 1 second
-        sleep( 1);
+        sleep( 10);
     }
 
     std::cout<< track + " stopped, closing." <<std::endl;
@@ -102,17 +105,18 @@ int main( int argc, char *argv[]){
 
     //if no argument, or one that is not a recognised command
     //is passed to this instande and an original instance is allready running
-    //then send the kill command to shut the ptogram down
+    //then send the kill command to shut the original program down
     if( !ipc.IPCOriginal()){
 
         ipc.IPCSend( kill.c_str());
+	std::cout<< kill.c_str();
 
     //else the program was called with bad arguments or without any
     //displaying notes on working commands
     }else{
 
-      //will output a list of commands when is completed
-      std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
+     //will output a list of commands when is completed
+     std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
     }
 
     ipc.IPCClose();
