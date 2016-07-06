@@ -22,12 +22,6 @@ class IPC{
     IPC(std::string fifo_dir);
     ~IPC();
 
-    const char* fifo; //named pipe
-    bool quit;
-
-    //Used to receive messages
-    char message[MAX_BUF];
-
     //returns true if there is only one instance
     bool isOnlyInstance();
 
@@ -39,7 +33,9 @@ class IPC{
 
   private:
 
+    const char* fifo; //named pipe
     bool onlyInstance;
+    char message[MAX_BUF]; //Used to receive messages
 };
 
 #endif
