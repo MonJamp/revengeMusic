@@ -1,16 +1,7 @@
 #ifndef IPC_H
 #define IPC_H
 
-#include <fcntl.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <cstring>
-#include <unistd.h>
-#include <iostream>
-#include <errno.h>
+#include <string>
 
 #define MAX_BUF 1024
 
