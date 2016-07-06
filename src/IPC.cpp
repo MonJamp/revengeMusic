@@ -26,6 +26,10 @@ IPC::IPC( std::string _location){
   std::memset(message, ' ', MAX_BUF);
 }
 
+IPC::~IPC() {
+  std::cout<<"Closing IPC"<<std::endl;
+}
+
 bool IPC::isOnlyInstance(){
   return onlyInstance;
 }
@@ -57,9 +61,4 @@ std::string IPC::IPCGet(){
 
       std::cout << "cannot read from write only fifo." << std::endl;
     }
-}
-
-//maje sure every thing is closed
-void IPC::IPCClose(){
-  std::cout<<"Closing IPC"<<std::endl;
 }

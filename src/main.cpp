@@ -64,7 +64,7 @@ int main( int argc, char *argv[]){
   }
 
     std::cout<< track + " stopped, closing." <<std::endl;
-    ipc.IPCClose();
+    delete(&ipc);
     return 0;
 
   //Send message then quit
@@ -73,7 +73,7 @@ int main( int argc, char *argv[]){
     //sends the message that was in args
     ///FOR NOW SIMPLY KILLS THE PROGRAM
     ipc.IPCSend( kill.c_str());
-    ipc.IPCClose();
+    delete(&ipc);
     return 0;
   }else{
 
@@ -93,7 +93,7 @@ int main( int argc, char *argv[]){
      std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
     }
 
-    ipc.IPCClose();
+    delete(&ipc);
     return 0;
   }
 }
