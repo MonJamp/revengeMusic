@@ -19,7 +19,7 @@ class IPC{
   public:
 
     //constructor sets home directory for fifo
-    IPC(std::string);
+    IPC(std::string fifo_dir);
     ~IPC();
 
     const char* fifo; //named pipe
@@ -38,6 +38,7 @@ class IPC{
     std::string GetMessage();
 
   private:
+
     bool onlyInstance;
 };
 
