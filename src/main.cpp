@@ -41,7 +41,7 @@ int main( int argc, char *argv[]){
   IPC ipc("/tmp/fifo");
 
   //Checks if this the only instance
-  if( argc == 2 && ipc.IPCOriginal()){
+  if( argc == 2 && ipc.isOnlyInstance()){
 
     music_dir += ( "/Music/" + track);
 
@@ -68,7 +68,7 @@ int main( int argc, char *argv[]){
     return 0;
 
   //Send message then quit
-  }else if( argc == 2 && !ipc.IPCOriginal()){
+  }else if( argc == 2 && !ipc.isOnlyInstance()){
 
     //sends the message that was in args
     ///FOR NOW SIMPLY KILLS THE PROGRAM
@@ -80,7 +80,7 @@ int main( int argc, char *argv[]){
     //if no argument, or one that is not a recognised command
     //is passed to this instande and an original instance is allready running
     //then send the kill command to shut the original program down
-    if( !ipc.IPCOriginal()){
+    if( !ipc.isOnlyInstance()){
 
         ipc.IPCSend( kill.c_str());
 	std::cout<< kill.c_str();

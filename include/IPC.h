@@ -27,11 +27,8 @@ class IPC{
     //Used to receive messages
     char message[MAX_BUF];
 
-    //this can determine if the program is the only instance
-    int pidfile;
-
-    //returns true if the program is the original process
-    bool IPCOriginal();
+    //returns true if there is only one instance
+    bool isOnlyInstance();
 
     //sends a message to the original process
     void IPCSend( const char[]);
@@ -41,6 +38,9 @@ class IPC{
 
     //shuts down the IPC functionality, this way fifos and pid files dont stay open
     void IPCClose();
+
+  private:
+    bool onlyInstance;
 };
 
 #endif

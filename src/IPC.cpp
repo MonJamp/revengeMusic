@@ -7,11 +7,17 @@ IPC::IPC( std::string _location){
   //fifo type file there
   fifo = _location.c_str();
 
-  std::string path = _location;
+  const char* pid_dir = "/tmp/revengeMusic.pid";
 
-  path += "revengeMusic.pid";
-
-  pidfile = open( path.c_str(), O_CREAT | O_RDONLY);
+  //Creates and/or Locks the pid file
+  int pid_fd = open(pid_dir, O_CREAT | O_RDONLY);
+  int lock = flock(pid_fd, LOCK_EX | LOCK_NB);
+  if(lock == 0) {
+    onlyInstance = true;
+  } else {
+    onlyInstance = false;
+  }
+  close(pid_fd);
 
   mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
 
@@ -20,21 +26,8 @@ IPC::IPC( std::string _location){
   std::memset(message, ' ', MAX_BUF);
 }
 
-//returns true if there is no other instance, also locks
-//the pid file to detect if there is already an instance running
-bool IPC::IPCOriginal(){
-
-   int rc = flock( pidfile, LOCK_EX | LOCK_NB);
-
-   if( rc == 0){
-
-     //std::cout << "original" << std::endl;
-     return true;
-   }else{
-
-     //std::cout << "secondary" << std::endl;
-     return false;
-   }
+bool IPC::isOnlyInstance(){
+  return onlyInstance;
 }
 
 //sends a message to the original process
@@ -77,7 +70,5 @@ std::string IPC::IPCGet(){
 
 //maje sure every thing is closed
 void IPC::IPCClose(){
-
   std::cout<<"Closing IPC"<<std::endl;
-  close( pidfile);
 }
