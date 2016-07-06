@@ -19,7 +19,7 @@ class IPC{
   public:
 
     //constructor sets home directory for fifo
-    IPC(std::string fifo_dir);
+    IPC(const char* fifo_dir);
     ~IPC();
 
     //returns true if there is only one instance
