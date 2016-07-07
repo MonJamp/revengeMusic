@@ -17,10 +17,14 @@ best case scenario is to mod rofi to play music files
       - Install the 'low level' libraries to `/usr/lib/`
     - **For Windows**
       - FMOD has it's own installer, nothing needs to be done manually 
-  - - [CMake](https://cmake.org/download/) (recommended)
+  - [CMake](https://cmake.org/download/) (recommended)
 
 ## Compiling
-revengeMusic can be built using the traditional commnds: `cmake . && make`
+  - **For Linux**
+    - Run `./build.sh`
+  - **For Windows**
+    - Make sure cmake and make are in PATH
+    - Run `build.cmd`
 
 ## Usage
 ```
