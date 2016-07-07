@@ -1,16 +1,7 @@
 #ifndef IPC_H
 #define IPC_H
 
-#include <fcntl.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <cstring>
-#include <unistd.h>
-#include <iostream>
-#include <errno.h>
+#include <string>
 
 #define MAX_BUF 1024
 
@@ -19,32 +10,23 @@ class IPC{
   public:
 
     //constructor sets home directory for fifo
-    IPC( std::string);
+    IPC(const char* fifo_dir);
+    ~IPC();
 
-    const char* fifo; //named pipe
-    bool quit;
-    int fd; //file descriptor
-
-    //Used to receive messages
-    char message[MAX_BUF];
-
-    //this can determine if the program is the only instance
-    int pidfile;
-
-    //returns 0 if the process isnt 'flock'ed
-    int rc;
-
-    //returns true if the program is the original process
-    bool IPCOriginal();
+    //returns true if there is only one instance
+    bool isOnlyInstance();
 
     //sends a message to the original process
-    void IPCSend( const char[]);
+    void SendMessage(const char* msg);
 
     //listens for an incomming message and returns it
-    std::string IPCGet();
+    std::string GetMessage();
 
-    //shuts down the IPC functionality, this way fifos and pid files dont stay open
-    void IPCClose();
+  private:
+
+    const char* fifo; //named pipe
+    bool onlyInstance;
+    char message[MAX_BUF]; //Used to receive messages
 };
 
 #endif
