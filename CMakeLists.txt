@@ -27,3 +27,5 @@ IF(FMOD_FOUND)
 ELSEIF(NOT WIN32)
   target_link_libraries(revengeMusic ${PROJECT_BINARY_DIR}/fmod/api/lowlevel/lib/x86_64)
 ENDIF(FMOD_FOUND)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "build/")
