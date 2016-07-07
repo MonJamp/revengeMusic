@@ -38,10 +38,10 @@ int main( int argc, char *argv[]){
 
   Sound song;
 
-  IPC ipc( music_dir + "/tmp/fifo");
+  IPC ipc("/tmp/fifo");
 
   //Checks if this the only instance
-  if( argc == 2 && ipc.IPCOriginal()){
+  if( argc == 2 && ipc.isOnlyInstance()){
 
     music_dir += ( "/Music/" + track);
 
@@ -56,7 +56,7 @@ int main( int argc, char *argv[]){
   while( song.isPlaying() && running){
 
     //will listen for IPC calls and process them here
-    if( ipc.IPCGet() == "kill" ) {
+    if( ipc.GetMessage() == "kill" ) {
       std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
       running = false;
     }
@@ -64,25 +64,25 @@ int main( int argc, char *argv[]){
   }
 
     std::cout<< track + " stopped, closing." <<std::endl;
-    ipc.IPCClose();
+    delete(&ipc);
     return 0;
 
   //Send message then quit
-  }else if( argc == 2 && !ipc.IPCOriginal()){
+  }else if( argc == 2 && !ipc.isOnlyInstance()){
 
     //sends the message that was in args
     ///FOR NOW SIMPLY KILLS THE PROGRAM
-    ipc.IPCSend( kill.c_str());
-    ipc.IPCClose();
+    ipc.SendMessage( kill.c_str());
+    delete(&ipc);
     return 0;
   }else{
 
     //if no argument, or one that is not a recognised command
     //is passed to this instande and an original instance is allready running
     //then send the kill command to shut the original program down
-    if( !ipc.IPCOriginal()){
+    if( !ipc.isOnlyInstance()){
 
-        ipc.IPCSend( kill.c_str());
+        ipc.SendMessage( kill.c_str());
 	std::cout<< kill.c_str();
 
     //else the program was called with bad arguments or without any
@@ -93,7 +93,7 @@ int main( int argc, char *argv[]){
      std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
     }
 
-    ipc.IPCClose();
+    delete(&ipc);
     return 0;
   }
 }
