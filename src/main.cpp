@@ -5,6 +5,7 @@
 #include "fmod_errors.h"
 
 #include <string>
+#include <cstring>
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
@@ -44,7 +45,7 @@ int main( int argc, char *argv[]) {
             //Get home directory if it is not defined in the environment variable
             home_dir = getpwuid(getuid())->pw_dir;
             if(home_dir == NULL) {
-                std::cer << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl;
+                std::cerr << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl;
                 return -1;
             }
         }
