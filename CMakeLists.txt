@@ -15,12 +15,21 @@ ELSEIF(NOT WIN32)
   include_directories(${PROJECT_BINARY_DIR}/fmod/api/lowlevel/inc)
 ENDIF(FMOD_FOUND)
 
+IF(WIN32)
 add_executable(
   revengeMusic
   src/main.cpp
-  src/Pipe.cpp
+  src/Windows/Pipe.cpp
   src/Sound.cpp
 )
+ELSEIF(UNIX)
+add_executable(
+  revengeMusic
+  src/main.cpp
+  src/Linux/Pipe.cpp
+  src/Sound.cpp
+)
+ENDIF(WIN32)
 
 IF(FMOD_FOUND)
   target_link_libraries(revengeMusic ${FMOD_LIBRARIES})
