@@ -1,17 +1,17 @@
-#ifndef IPC_H
-#define IPC_H
+#ifndef PIPE_H
+#define PIPE_H
 
 #include <string>
 
 #define MAX_BUF 1024
 
-class IPC{
+class Pipe{
 
   public:
 
     //constructor sets home directory for fifo
-    IPC(const char* fifo_dir);
-    ~IPC();
+    Pipe(const char* fifo_dir);
+    ~Pipe();
 
     //returns true if there is only one instance
     bool isOnlyInstance();
@@ -23,7 +23,8 @@ class IPC{
     std::string GetMessage();
 
   private:
-
+  
+    int pid_fd;
     const char* fifo; //named pipe
     bool onlyInstance;
     char message[MAX_BUF]; //Used to receive messages
