@@ -1,13 +1,13 @@
-#include <string>
-#include <stdio.h>
-#include <errno.h>
-#include <iostream>
+#include "Sound.h"
+#include "Pipe.h"
 
 #include <fmod.hpp>
 #include "fmod_errors.h"
 
-#include "Sound.h"
-#include "Pipe.h"
+#include <string>
+#include <stdio.h>
+#include <errno.h>
+#include <iostream>
 
 //standard unix headers, need this to get present working directory
 #include <stdlib.h>
