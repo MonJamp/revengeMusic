@@ -23,7 +23,8 @@ class IPC{
     std::string GetMessage();
 
   private:
-
+  
+    int pid_fd;
     const char* fifo; //named pipe
     bool onlyInstance;
     char message[MAX_BUF]; //Used to receive messages
