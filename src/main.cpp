@@ -50,57 +50,35 @@ int main( int argc, char *argv[]) {
 
     IPC ipc("/tmp/fifo");
 
-    //Checks if this the only instance
-    if(argc == 2 && ipc.isOnlyInstance()) {
-
-        std::cout << "Playing file -" + track << std::endl;
-        song.createSound( music_dir.c_str());
-        song.playSound(false);
-
-        std::cout << "Program is running" << std::endl;
-
-        //might want to slow this down later too
-        while(song.isPlaying() && running){
-
-            //will listen for IPC calls and process them here
-            if(ipc.GetMessage() == "kill" ) {
-                  std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
-                  running = false;
-            }
-        sleep(10);
-    }
-
-    std::cout << track + " stopped, closing." << std::endl;
-    delete(&ipc);
-    return 0;
-
-    //Send message then quit
-    } else if(argc == 2 && !ipc.isOnlyInstance()) {
-
-        //sends the message that was in args
-        ///FOR NOW SIMPLY KILLS THE PROGRAM
-        ipc.SendMessage( kill.c_str());
-        delete(&ipc);
+    if(!ipc.isOnlyInstance() && argv[1] == NULL) {
+        
+        ipc.SendMessage("kill");
         return 0;
-    } else {
-
-        //if no argument, or one that is not a recognised command
-        //is passed to this instande and an original instance is allready running
-        //then send the kill command to shut the original program down
-        if(!ipc.isOnlyInstance()){
-
-            ipc.SendMessage(kill.c_str());
-            std::cout << kill.c_str();
-
-        //else the program was called with bad arguments or without any
-        //displaying notes on working commands
-        } else {
-
-            //will output a list of commands when is completed
-            std::cout << "\n-Type \"revengeMusic -COMMAND\" eg:\n";
+    } else if(!ipc.isOnlyInstance() && argv[1] != NULL) {
+        
+        ipc.SendMessage(argv[1]);
+        return 0;
+    } else if(ipc.isOnlyInstance()) {
+        
+        std::cout << "Playing file: " << track << std::endl;
+        song.createSound(music_dir.c_str());
+        song.playSound(false);
+        
+        std::string msg;
+        
+        while(song.isPlaying() && running) {
+            //GetMessage() is blocking which might need to be changed
+            msg = ipc.GetMessage();
+            
+            if(msg == "kill") {
+                std::cout << "Killed!" << std::endl;
+                running = false;
+            }
         }
-
-        delete(&ipc);
+        
+        std::cout << track << " stopped, closing." << std::endl;
+        //Currently no need to delete
+        //delete(&ipc);
         return 0;
     }
 }

@@ -22,9 +22,7 @@ IPC::IPC(const char* fifo_dir) {
     } else {
         onlyInstance = false;
     }
-    close(pid_fd);
-
-    mkfifo( fifo, S_IWUSR | S_IRUSR |S_IRGRP | S_IROTH);
+    //close(pid_fd);
 
     std::memset(message, ' ', MAX_BUF);
 }
@@ -41,10 +39,10 @@ bool IPC::isOnlyInstance() {
 
 //sends a message to the fifo
 void IPC::SendMessage(const char* msg) {
-
-     int fd = open(fifo, O_WRONLY);
-     write(fd, message, MAX_BUF);
-     close(fd);
+    mkfifo(fifo, 0666);
+    int fd = open(fifo, O_WRONLY);
+    write(fd, msg, MAX_BUF);
+    close(fd);
 }
 
 std::string IPC::GetMessage() {
@@ -57,5 +55,6 @@ std::string IPC::GetMessage() {
         return std::string(message);
     } else {
         std::cout << "cannot read from write only fifo." << std::endl;
+        return "none";
     }
 }
