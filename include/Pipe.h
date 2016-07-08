@@ -1,6 +1,10 @@
 #ifndef PIPE_H
 #define PIPE_H
 
+#ifdef __WIN32
+  #include <windows.h>
+#endif
+
 #include <string>
 
 #define MAX_BUF 1024
@@ -23,7 +27,11 @@ class Pipe{
     std::string GetMessage();
 
   private:
-  
+    #ifdef __WIN32
+      HANDLE mutexHandle;
+      HANDLE pipeHandle;
+    #endif
+    
     int pid_fd;
     const char* fifo; //named pipe
     bool onlyInstance;
