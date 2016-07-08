@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-#include "IPC.h"
+#include "Pipe.h"
 
 Pipe::Pipe(const char* fifo_dir)
 {
