@@ -9,7 +9,7 @@
 #include "fmod_errors.h"
 
 #include "Sound.h"
-#include "IPC.h"
+#include "Pipe.h"
 
 //standard unix headers, need this to get present working directory
 #include <unistd.h>
@@ -18,17 +18,17 @@
 
 int main( int argc, char *argv[]) {
 
-    IPC ipc("/tmp/fifo");
+    Pipe pipe("/tmp/fifo");
 
-    if(!ipc.isOnlyInstance()) {
+    if(!pipe.isOnlyInstance()) {
         if(argv[1] == NULL) {
-            ipc.SendMessage("kill");
+            pipe.SendMessage("kill");
             return 0;
         } else {
-            ipc.SendMessage(argv[1]);
+            pipe.SendMessage(argv[1]);
             return 0; 
         }
-    } else if(ipc.isOnlyInstance()) {
+    } else if(pipe.isOnlyInstance()) {
         
         if(argv[1] == NULL) {
             
@@ -65,7 +65,7 @@ int main( int argc, char *argv[]) {
         
         while(song.isPlaying() && running) {
             //GetMessage() is blocking which might need to be changed
-            msg = ipc.GetMessage();
+            msg = pipe.GetMessage();
             
             //Events
             if(msg == "kill") {
