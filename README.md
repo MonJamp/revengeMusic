@@ -18,6 +18,7 @@ best case scenario is to mod rofi to play music files
     - **For Windows**
       - FMOD has it's own installer, nothing needs to be done manually 
   - [CMake](https://cmake.org/download/) (recommended)
+  - [MinGW](http://www.mingw.org/wiki/getting_started) (recommended)
 
 ## Compiling
   - **For Linux**
