@@ -1,17 +1,17 @@
-#ifndef IPC_H
-#define IPC_H
+#ifndef PIPE_H
+#define PIPE_H
 
 #include <string>
 
 #define MAX_BUF 1024
 
-class IPC{
+class Pipe{
 
   public:
 
     //constructor sets home directory for fifo
-    IPC(const char* fifo_dir);
-    ~IPC();
+    Pipe(const char* fifo_dir);
+    ~Pipe();
 
     //returns true if there is only one instance
     bool isOnlyInstance();

@@ -1,4 +1,4 @@
-#include <IPC.h>
+#include <Pipe.h>
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <unistd.h>
@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 
-IPC::IPC(const char* fifo_dir) {
+Pipe::Pipe(const char* fifo_dir) {
 
     //set fifo to home directory and check if there is allready a
     //fifo type file there
@@ -27,25 +27,25 @@ IPC::IPC(const char* fifo_dir) {
     std::memset(message, ' ', MAX_BUF);
 }
 
-IPC::~IPC() {
+Pipe::~Pipe() {
     close(pid_fd);
-    std::cout << "Closing IPC" << std::endl;
+    std::cout << "Closing pipe" << std::endl;
 }
 
-bool IPC::isOnlyInstance() {
+bool Pipe::isOnlyInstance() {
 
     return onlyInstance;
 }
 
 //sends a message to the fifo
-void IPC::SendMessage(const char* msg) {
+void Pipe::SendMessage(const char* msg) {
     mkfifo(fifo, 0666);
     int fd = open(fifo, O_WRONLY);
     write(fd, msg, MAX_BUF);
     close(fd);
 }
 
-std::string IPC::GetMessage() {
+std::string Pipe::GetMessage() {
     
     int fd = open(fifo, O_RDONLY);
     read(fd, message, MAX_BUF);
