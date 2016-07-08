@@ -1,3 +1,4 @@
 mkdir build
 cd build
-cmake .. && make
+cmake -G "MinGW Makefiles" ../
+make
