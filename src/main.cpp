@@ -28,8 +28,12 @@ int main( int argc, char *argv[]){
     //Get home directory of user
     home_dir = getenv("HOME");
     if(home_dir == NULL) {
-        perror("Error: could not get home directory");
-        return -1;
+        //Get home directory if it is not defined in the environment variable
+        home_dir = getpwuid(getuid())->pw_dir;
+        if(home_dir == NULL) {
+            perror("Error: could not get home directory");
+            return -1;
+        }
     }
     
     if(argc > 0 && argv[1] != NULL) {
