@@ -18,7 +18,7 @@ ENDIF(FMOD_FOUND)
 add_executable(
   revengeMusic
   src/main.cpp
-  src/IPC.cpp
+  src/Pipe.cpp
   src/Sound.cpp
 )
 
