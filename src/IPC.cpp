@@ -15,7 +15,7 @@ IPC::IPC(const char* fifo_dir) {
     const char* pid_dir = "/tmp/revengeMusic.pid";
 
     //Creates and/or Locks the pid file
-    int pid_fd = open(pid_dir, O_CREAT | O_RDONLY);
+    pid_fd = open(pid_dir, O_CREAT | O_RDONLY);
     int lock = flock(pid_fd, LOCK_EX | LOCK_NB);
     if(lock == 0) {
         onlyInstance = true;
@@ -28,7 +28,7 @@ IPC::IPC(const char* fifo_dir) {
 }
 
 IPC::~IPC() {
-
+    close(pid_fd);
     std::cout << "Closing IPC" << std::endl;
 }
 
