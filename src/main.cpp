@@ -20,21 +20,27 @@ int main( int argc, char *argv[]){
 
   std::string track;
   std::string music_dir;
+  const char* home_dir;
   bool running = true;
 
   std::string kill = "kill";
-  const char* cwd;
-
-  //Gets the Home directory of the user
-  if ((cwd = getenv("HOME")) != NULL && argv[1] != NULL)  {
-
-    cwd = getpwuid(getuid())->pw_dir;
-    track = argv[1];
-    music_dir = cwd;
-  } else {
-      perror("error getting present working directory");
-      return 0;
-  }
+  
+    //Get home directory of user
+    home_dir = getenv("HOME");
+    if(home_dir == NULL) {
+        perror("Error: could not get home directory");
+        return -1;
+    }
+    
+    if(argc > 0 && argv[1] != NULL) {
+        track = argv[1];
+        music_dir = home_dir;
+        music_dir += "/Music/";
+        music_dir += track;
+    } else {
+        perror("Error: track name invalid");
+        return -2;
+    }
 
   Sound song;
 
@@ -42,8 +48,6 @@ int main( int argc, char *argv[]){
 
   //Checks if this the only instance
   if( argc == 2 && ipc.isOnlyInstance()){
-
-    music_dir += ( "/Music/" + track);
 
     std::cout<< "Playing file -" + track <<std::endl;
     song.createSound( music_dir.c_str());
@@ -83,7 +87,7 @@ int main( int argc, char *argv[]){
     if( !ipc.isOnlyInstance()){
 
         ipc.SendMessage( kill.c_str());
-	std::cout<< kill.c_str();
+    std::cout<< kill.c_str();
 
     //else the program was called with bad arguments or without any
     //displaying notes on working commands
