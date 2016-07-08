@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
-#include <cstring>
-#include <stdlib.h>
 
 #include <fmod.hpp>
 #include "fmod_errors.h"
@@ -12,6 +10,7 @@
 #include "Pipe.h"
 
 //standard unix headers, need this to get present working directory
+#include <stdlib.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/types.h>
@@ -31,8 +30,7 @@ int main( int argc, char *argv[]) {
     } else if(pipe.isOnlyInstance()) {
         
         if(argv[1] == NULL) {
-            
-            perror("Error: track name invalid");
+            std::cerr << "Error track name invalied" << std::endl;
             return -2;
         }
         
@@ -46,7 +44,7 @@ int main( int argc, char *argv[]) {
             //Get home directory if it is not defined in the environment variable
             home_dir = getpwuid(getuid())->pw_dir;
             if(home_dir == NULL) {
-                perror("Error: could not get home directory");
+                std::cer << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl;
                 return -1;
             }
         }
