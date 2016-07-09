@@ -1,4 +1,5 @@
 mkdir build
 cd build
-cmake -G "MinGW Makefiles" ../
-make
+cmake ../
+MSBuild revengeMusic.sln
+cd ..
