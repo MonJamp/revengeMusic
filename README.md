@@ -23,7 +23,7 @@ best case scenario is to mod rofi to play music files
   - **For Linux**
     - Run `./build.sh`
   - **For Windows**
-    - Make sure cmake and make are in PATH
+    - Make sure cmake is in PATH
     - Run `build.cmd`
 
 ## Usage
