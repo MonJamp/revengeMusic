@@ -1,99 +1,92 @@
-#include <string>
-#include <stdio.h>
-#include <errno.h>
-#include <iostream>
-#include <cstring>
-#include <stdlib.h>
+#include "Sound.h"
+#include "Pipe.h"
 
 #include <fmod.hpp>
 #include "fmod_errors.h"
 
-#include "Sound.h"
-#include "IPC.h"
+#include <string>
+#include <cstring>
+#include <stdio.h>
+#include <errno.h>
+#include <iostream>
 
 //standard unix headers, need this to get present working directory
-#include <unistd.h>
-#include <pwd.h>
-#include <sys/types.h>
+#ifdef __unix
+  #include <stdlib.h>
+  #include <unistd.h>
+  #include <pwd.h>
+  #include <sys/types.h>
+#elif __WIN32
+  #include <windows.h>
+#else
+  #ERROR "Incompatible OS"
+#endif
 
-int main( int argc, char *argv[]){
+int main( int argc, char *argv[]) {
 
-  std::string track;
-  std::string music_dir;
-  bool running = true;
+    Pipe pipe("/tmp/fifo");
 
-  std::string kill = "kill";
-  const char* cwd;
+    if(!pipe.isOnlyInstance()) {
+        if(argv[1] == NULL) {
+            pipe.SendMessage("kill");
+            return 0;
+        } else {
+            pipe.SendMessage(argv[1]);
+            return 0;
+        }
+    } else if(pipe.isOnlyInstance()) {
 
-  //Gets the Home directory of the user
-  if ((cwd = getenv("HOME")) != NULL && argv[1] != NULL)  {
+        if(argv[1] == NULL) {
+            std::cerr << "Error track name invalied" << std::endl;
+            return -2;
+        }
 
-    cwd = getpwuid(getuid())->pw_dir;
-    track = argv[1];
-    music_dir = cwd;
-  } else {
-      perror("error getting present working directory");
-      return 0;
-  }
+        std::string music_dir;
+        const char* home_dir;
+        std::string track = argv[1];
 
-  Sound song;
+        //Get home directory of user
+        #ifdef __unix
+          home_dir = getenv("HOME");
+        if(home_dir == NULL) {
+            //Get home directory if it is not defined in the environment variable
+            home_dir = getpwuid(getuid())->pw_dir;
+            if(home_dir == NULL) {
+                std::cerr << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl;
+                return -1;
+            }
+        }
+        #elif __WIN32
+          char home_dir_buf[100];
+          if(GetEnvironmentVariable("HOMEPATH",home_dir_buf,100) == 0)
+          { std::cerr << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl; }
+          home_dir = home_dir_buf;
+        #endif
 
-  IPC ipc("/tmp/fifo");
+        music_dir = home_dir;
+        music_dir += "/Music/";
+        music_dir += track;
 
-  //Checks if this the only instance
-  if( argc == 2 && ipc.isOnlyInstance()){
+        Sound song;
+        std::cout << "Playing file: " << track << std::endl;
+        song.createSound(music_dir.c_str());
+        song.playSound(false);
 
-    music_dir += ( "/Music/" + track);
+        std::string msg;
+        bool running = true;
 
-    std::cout<< "Playing file -" + track <<std::endl;
-    song.createSound( music_dir.c_str());
-    song.playSound( false);
+        while(song.isPlaying() && running) {
+            //GetMessage() is blocking which might need to be changed
+            msg = pipe.GetMessage();
 
-    std::cout<< "Program is running"<<std::endl;
+            //Events
+            if(msg == "kill") {
+                std::cout << "Killed!" << std::endl;
+                running = false;
+            }
+        }
 
-    
-  //might want to slow this down later too
-  while( song.isPlaying() && running){
-
-    //will listen for IPC calls and process them here
-    if( ipc.GetMessage() == "kill" ) {
-      std::cout << "~~~~~~~~~~~~~~~~~~~~~~~\n" << std::endl;
-      running = false;
+        std::cout << track << " stopped, closing." << std::endl;
+        return 0;
     }
-    sleep( 10);
-  }
-
-    std::cout<< track + " stopped, closing." <<std::endl;
-    delete(&ipc);
-    return 0;
-
-  //Send message then quit
-  }else if( argc == 2 && !ipc.isOnlyInstance()){
-
-    //sends the message that was in args
-    ///FOR NOW SIMPLY KILLS THE PROGRAM
-    ipc.SendMessage( kill.c_str());
-    delete(&ipc);
-    return 0;
-  }else{
-
-    //if no argument, or one that is not a recognised command
-    //is passed to this instande and an original instance is allready running
-    //then send the kill command to shut the original program down
-    if( !ipc.isOnlyInstance()){
-
-        ipc.SendMessage( kill.c_str());
-	std::cout<< kill.c_str();
-
-    //else the program was called with bad arguments or without any
-    //displaying notes on working commands
-    }else{
-
-     //will output a list of commands when is completed
-     std::cout<< "\n-Type \"revengeMusic -COMMAND\" eg:\n";
-    }
-
-    delete(&ipc);
-    return 0;
-  }
 }
