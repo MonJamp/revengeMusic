@@ -1,3 +1,5 @@
-mkdir build/
-cd build/
-cmake .. && make
+mkdir build
+cd build
+cmake ../
+MSBuild revengeMusic.sln
+cd ..
