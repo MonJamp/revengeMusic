@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.6)
 project (revengeMusic)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/")
@@ -21,13 +21,16 @@ add_executable(
   src/main.cpp
   src/Windows/Pipe.cpp
   src/Sound.cpp
+  src/SysError.cpp
 )
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "revengeMusic")
 ELSEIF(UNIX)
 add_executable(
   revengeMusic
   src/main.cpp
   src/Linux/Pipe.cpp
   src/Sound.cpp
+  src/SysError.cpp
 )
 ENDIF(WIN32)
 
