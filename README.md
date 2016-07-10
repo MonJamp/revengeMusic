@@ -25,7 +25,7 @@ best case scenario is to mod rofi to play music files
   - **For Windows**
     - Make sure cmake and msbuild is in PATH
     - Run `build.cmd`
-    - Move a copy of fmod.dll from the FMOD install folder into `revengemusic/build/Debug/`
+    - Move a copy of fmod.dll from the FMOD install folder into `revengeMusic/build/Debug/`
 
 ## Usage
 ```
