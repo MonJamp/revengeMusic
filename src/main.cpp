@@ -1,5 +1,6 @@
 #include "Sound.h"
 #include "Pipe.h"
+#include "SysError.h"
 
 #include <fmod.hpp>
 #include "fmod_errors.h"
@@ -23,7 +24,17 @@
 #endif
 
 int main( int argc, char *argv[]) {
-
+    
+    #ifdef __unix
+        errno = 0;
+	#elif _WIN32
+		SetLastError(0);
+    #endif
+	
+	#ifdef RELEASE
+		SysError::Log();
+	#endif
+	
     Pipe pipe("/tmp/fifo");
 
     if(!pipe.isOnlyInstance()) {
@@ -52,14 +63,16 @@ int main( int argc, char *argv[]) {
             //Get home directory if it is not defined in the environment variable
             home_dir = getpwuid(getuid())->pw_dir;
             if(home_dir == NULL) {
-                std::cerr << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl;
+                SysError::Print("Could not find home directory!");
                 return -1;
             }
         }
         #elif _WIN32
           char home_dir_buf[100];
-          if(GetEnvironmentVariable("HOMEPATH",home_dir_buf,100) == 0)
-          { std::cerr << "Could not get home directory:\n\t" << std::strerror(errno) << std::endl; }
+          if(GetEnvironmentVariable("HOMEPATH",home_dir_buf,100) == 0) {
+              SysError::Print("Could not find home directory!");
+              return -1;
+          }
           home_dir = home_dir_buf;
         #endif
 
