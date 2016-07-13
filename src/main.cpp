@@ -1,6 +1,6 @@
 #include "Sound.h"
 #include "Pipe.h"
-#include "SysError.h"
+#include "Logger.h"
 
 #include <fmod.hpp>
 #include "fmod_errors.h"
@@ -64,7 +64,7 @@ int main( int argc, char *argv[]) {
               //Get home directory if it is not defined in the environment variable
               home_dir = getpwuid(getuid())->pw_dir;
               if(home_dir == NULL) {
-                  SysError::Print("Could not find home directory!");
+                  Logger::PrintError("Could not find home directory!");
                   return -1;
               }
           }
@@ -80,7 +80,7 @@ int main( int argc, char *argv[]) {
           wchar_t music_dir_buf[MAX_PATH];
           char char_buf[MAX_PATH];
           if(SHGetKnownFolderPath(FOLDERID_Music,0,NULL,music_dir_ptr) != S_OK) {
-              SysError::Print("Could not find music directory!");
+              Logger::PrintError("Could not find music directory!");
               return -1;
           }
           

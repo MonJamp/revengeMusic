@@ -23,7 +23,7 @@ add_executable(
   src/main.cpp
   src/Windows/Pipe.cpp
   src/Sound.cpp
-  src/SysError.cpp
+  src/Logger.cpp
 )
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "revengeMusic")
 ELSEIF(UNIX)
@@ -32,7 +32,7 @@ add_executable(
   src/main.cpp
   src/Linux/Pipe.cpp
   src/Sound.cpp
-  src/SysError.cpp
+  src/Logger.cpp
 )
 ENDIF(WIN32)
 
