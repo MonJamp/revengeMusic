@@ -96,9 +96,10 @@ int main( int argc, char *argv[]) {
         track_dir += track_name;
 
         Sound song;
+        song.init();
         std::cout << "Playing file: " << track_name << std::endl;
         song.createSound(track_dir.c_str());
-        song.playSound(false);
+        song.play();
 
         std::string msg;
         bool running = true;

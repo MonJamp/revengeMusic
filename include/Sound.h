@@ -1,38 +1,28 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include <string>
-#include <iostream>
-
 #include <fmod.hpp>
-#include "fmod_errors.h"
 
 class Sound{
 
-public:
+    public:
+        
+        Sound();
+        ~Sound();
+        
+        bool init();
+        void createSound(const char* track_dir);
 
-  bool playing;
+        bool isPlaying();
 
-  FMOD_RESULT result;
-
-  FMOD::Channel *channel = NULL;
-
-  FMOD::Sound *audio;
-
-  FMOD::System *m_pSystem;
-
-  Sound();
-
-  void createSound( const char*);
-
-  void playSound( bool);
-
-  bool isPlaying();
-
-  void releaseSound();
-  
-  void play();
-  void pause();
+        void play();
+        void pause();
+        
+    private:
+    
+        FMOD::Channel *channel;
+        FMOD::Sound *newSound;
+        FMOD::System *m_pSystem;
 };
 
 #endif
