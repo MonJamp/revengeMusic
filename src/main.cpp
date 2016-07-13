@@ -106,12 +106,19 @@ int main( int argc, char *argv[]) {
         while(song.isPlaying() && running) {
             //GetMessage() is blocking which might need to be changed
             msg = pipe.GetMessage();
-
+            
             //Events
             if(msg == "kill") {
                 std::cout << "Killed!" << std::endl;
                 running = false;
+            } else if(msg == "play") {
+                std::cout << "Play" << std::endl;
+                song.play();
+            } else if(msg == "pause") {
+                std::cout << "Pause" << std::endl;
+                song.pause();
             }
+            
         }
 
         std::cout << track_name << " stopped, closing." << std::endl;

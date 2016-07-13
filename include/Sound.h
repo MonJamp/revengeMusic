@@ -30,6 +30,9 @@ public:
   bool isPlaying();
 
   void releaseSound();
+  
+  void play();
+  void pause();
 };
 
 #endif

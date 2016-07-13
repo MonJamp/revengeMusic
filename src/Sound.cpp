@@ -52,3 +52,11 @@ void Sound::releaseSound(){
 
   audio->release();
 }
+
+void Sound::play() {
+    channel->setPaused(false);
+}
+
+void Sound::pause() {
+    channel->setPaused(true);
+}
