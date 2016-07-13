@@ -1,62 +1,76 @@
 #include "Sound.h"
 
-Sound::Sound(){
+#include <fmod.hpp>
 
-  if( FMOD::System_Create( &m_pSystem) != FMOD_OK){
+#include <iostream>
 
-    std::cout<< "Could not create sound system." <<std::endl;
-    return;
-  }
-
-  int driverCount = 0;
-  m_pSystem->getNumDrivers( &driverCount);
-
-  if( driverCount == 0){
-
-    std::cout<< "no sound driver was found" <<std::endl;
-    return;
-  }
-
-  //system is initiallised with 10 channels for now
-  m_pSystem->init( 10, FMOD_INIT_NORMAL, NULL);
+Sound::Sound() {
+    
+    channel = nullptr;
+    newSound = nullptr;
+    m_pSystem = nullptr;
 }
 
-//loads sound in path to memory
-void Sound::createSound( const char *pFile) {
-
-  m_pSystem->createStream( pFile, FMOD_DEFAULT, 0, &audio);
+Sound::~Sound() {
+    
+    channel->stop();
+    newSound->release();
+    m_pSystem->release();
 }
 
-void Sound::playSound( bool bLoop){
+bool Sound::init() {
+    
+    if(FMOD::System_Create(&m_pSystem) != FMOD_OK) {
 
-      if ( !bLoop)
-         audio->setMode( FMOD_LOOP_OFF);
-      else{
-
-         audio->setMode( FMOD_LOOP_NORMAL);
-         audio->setLoopCount( -1);
-      }
-
-      playing = m_pSystem->playSound( audio, 0, false, &channel);
-   }
-
-bool Sound::isPlaying(){
-
-  //polls the channel to check if music has stopped
-  channel->isPlaying( &playing);
-
-  return playing;
+        std::cout << "Could not create sound system." << std::endl;
+        return false;
+    }
+    
+    int driverCount = 0;
+    m_pSystem->getNumDrivers(&driverCount);
+    
+    if(driverCount == 0) {
+        
+        std::cout << "No sound drivers found!" << std::endl;
+        return false;
+    }
+    
+    //system is initiallised with 10 channels for now
+    m_pSystem->init(10, FMOD_INIT_NORMAL, NULL);
+    
+    return true;
 }
 
-void Sound::releaseSound(){
+void Sound::createSound(const char *pFile) {
+    
+    m_pSystem->createStream(pFile, FMOD_DEFAULT, 0, &newSound);
+}
 
-  audio->release();
+bool Sound::isPlaying() {
+    
+    bool playing;
+    channel->isPlaying(&playing);
+    return playing;
 }
 
 void Sound::play() {
-    channel->setPaused(false);
+    
+    FMOD::Sound *currentSound;
+    channel->getCurrentSound(&currentSound);
+    
+    //Check if there's a new sound to be played
+    //if there is, play that sound otherwise
+    //unpause channel if it's paused
+    if(currentSound != newSound) {
+        
+        m_pSystem->playSound(newSound, 0, false, &channel);
+    } else {
+        
+        channel->setPaused(false);
+    }
 }
 
 void Sound::pause() {
+    
     channel->setPaused(true);
 }
