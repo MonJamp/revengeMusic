@@ -1,4 +1,4 @@
-#include "SysError.h"
+#include "Logger.h"
 
 #include <iostream>
 #include <string>
@@ -50,20 +50,20 @@ static std::string LastErrorToString() {
         
 }
 
-namespace SysError {
+namespace Logger {
     std::stringstream error_msg;
     bool error_set = false;
 	bool logging = false;
 
-    void Set(std::string msg) {
+    void SetError(std::string msg) {
         error_msg << msg << "\n"
                 << "\t" << LastErrorToString();
         error_set = true;
     }
     
-    void Print(std::string msg) {
+    void PrintError(std::string msg) {
         if(!error_set)
-            Set(msg);
+            SetError(msg);
         std::cerr << error_msg.str() << std::endl;
     }
     
