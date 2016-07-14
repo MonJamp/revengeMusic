@@ -152,6 +152,11 @@ void Sound::play_next() {
     do {
         accept_song = true;
         
+        if(mode.loop_file) {
+            nextSong = this->getCurrentSong();
+            continue;
+        }
+        
         if(mode.shuffle) {
             nextSong = filelist[rand() % filelist.size()];
         }

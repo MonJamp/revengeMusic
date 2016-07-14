@@ -15,7 +15,7 @@ class Sound {
 
     public:
         
-        Sound(const char* music_dir, int flags = LOOP_FILE | SHUFFLE);
+        Sound(const char* music_dir, int flags = SHUFFLE);
         ~Sound();
         
         bool init();
