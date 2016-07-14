@@ -3,12 +3,18 @@
 #include <fmod.hpp>
 
 #include <iostream>
+#include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/path.hpp"
 
-Sound::Sound() {
+using namespace boost;
+
+Sound::Sound(const char* music_dir) {
     
     channel = nullptr;
     newSound = nullptr;
     m_pSystem = nullptr;
+    
+    getFileList(music_dir);
 }
 
 Sound::~Sound() {
@@ -16,6 +22,37 @@ Sound::~Sound() {
     channel->stop();
     newSound->release();
     m_pSystem->release();
+}
+
+void Sound::getFileList(const char* music_dir) {
+    
+    filesystem::path dir(music_dir);
+
+    try {
+        if (filesystem::exists(dir)) {
+            if(filesystem::is_regular_file(dir)) {
+                
+                dir = dir.parent_path();
+            }
+            
+            if(filesystem::is_directory(dir)) {
+                for (filesystem::directory_entry& x : filesystem::directory_iterator(dir)) {
+                    if(x.path().extension() == ".mp3") {
+                        
+                        filelist.push_back(x.path().string());
+                    }
+                }
+            } else {
+                std::cout << dir << " is not supported or corrupt" << std::endl;
+            }
+        } else {
+            
+            std::cout << dir << " does not exist\n";
+        }
+    }
+    catch (const filesystem::filesystem_error& error) {
+        std::cout << error.what() << '\n';
+    }
 }
 
 bool Sound::init() {

@@ -17,6 +17,12 @@ ELSEIF(NOT WIN32)
   include_directories(${PROJECT_BINARY_DIR}/fmod/api/lowlevel/inc)
 ENDIF(FMOD_FOUND)
 
+#Find Boost
+find_package(Boost 1.58 COMPONENTS filesystem REQUIRED)
+IF(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+ENDIF(Boost_FOUND)
+
 IF(WIN32)
 add_executable(
   revengeMusic
@@ -37,5 +43,5 @@ add_executable(
 ENDIF(WIN32)
 
 IF(FMOD_FOUND)
-  target_link_libraries(revengeMusic ${FMOD_LIBRARIES})
+  target_link_libraries(revengeMusic ${Boost_LIBRARIES} ${FMOD_LIBRARIES})
 ENDIF(FMOD_FOUND)
