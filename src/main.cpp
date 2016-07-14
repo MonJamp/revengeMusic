@@ -123,9 +123,12 @@ int main( int argc, char *argv[]) {
             } else if(msg == "prev") {
                 std::cout << "Previous" << std::endl;
                 song.play_prev();
-            } else if (msg == "shuffle") {
+            } else if(msg == "shuffle") {
                 std::cout << "Toggle Shuffle" << std::endl;
                 song.setMode(SHUFFLE);
+            } else if(msg == "loop-file") {
+                std::cout << "Toggle File Loop" << std::endl;
+                song.setMode(LOOP_FILE);
             }
             
         }
