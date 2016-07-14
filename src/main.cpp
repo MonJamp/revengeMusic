@@ -98,8 +98,7 @@ int main( int argc, char *argv[]) {
         Sound song;
         song.init();
         std::cout << "Playing file: " << track_name << std::endl;
-        song.createSound(track_dir.c_str());
-        song.play();
+        song.play(track_dir.c_str());
 
         std::string msg;
         bool running = true;
