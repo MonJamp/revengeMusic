@@ -6,17 +6,23 @@
 #include <vector>
 #include <string>
 
-class Sound{
+enum {
+    LOOP_FILE   = 1,
+    SHUFFLE     = 2
+};
+
+class Sound {
 
     public:
         
-        Sound(const char* music_dir);
+        Sound(const char* music_dir, int flags = LOOP_FILE | SHUFFLE);
         ~Sound();
         
         bool init();
 
         bool isPlaying();
-
+        
+        void setMode(int flags);
         void play();
         void play(const char* track_dir);
         void pause();
@@ -26,6 +32,12 @@ class Sound{
     private:
         
         void getFileList(const char* music_dir);
+        std::string getCurrentSong();
+        
+        struct Mode {
+            bool loop_file;
+            bool shuffle;
+        } mode;
         
         std::vector<std::string> filelist;
         std::vector<std::string> playedFiles;
