@@ -95,7 +95,7 @@ int main( int argc, char *argv[]) {
         track_dir += music_dir;
         track_dir += track_name;
 
-        Sound song;
+        Sound song(music_dir.c_str());
         song.init();
         std::cout << "Playing file: " << track_name << std::endl;
         song.play(track_dir.c_str());
@@ -117,6 +117,12 @@ int main( int argc, char *argv[]) {
             } else if(msg == "pause") {
                 std::cout << "Pause" << std::endl;
                 song.pause();
+            } else if(msg == "next") {
+                std::cout << "Next" << std::endl;
+                song.play_next();
+            } else if(msg == "prev") {
+                std::cout << "Previous" << std::endl;
+                song.play_prev();
             }
             
         }
