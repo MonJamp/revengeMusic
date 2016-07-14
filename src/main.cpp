@@ -117,6 +117,12 @@ int main( int argc, char *argv[]) {
             } else if(msg == "pause") {
                 std::cout << "Pause" << std::endl;
                 song.pause();
+            } else if(msg == "next") {
+                std::cout << "Next" << std::endl;
+                song.play_next();
+            } else if(msg == "prev") {
+                std::cout << "Previous" << std::endl;
+                song.play_prev();
             }
             
         }

@@ -1,10 +1,14 @@
 #include "Sound.h"
 
 #include <fmod.hpp>
-
-#include <iostream>
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/path.hpp"
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace boost;
 
@@ -14,6 +18,7 @@ Sound::Sound(const char* music_dir) {
     newSound = nullptr;
     m_pSystem = nullptr;
     
+    srand(time(NULL));
     getFileList(music_dir);
 }
 
@@ -107,9 +112,56 @@ void Sound::play(const char* pFile) {
     newSound->release();
     m_pSystem->createStream(pFile, FMOD_DEFAULT, 0, &newSound);
     m_pSystem->playSound(newSound, 0, false, &channel);
+    
+    playedFiles.push_back(pFile);
 }
 
 void Sound::pause() {
     
     channel->setPaused(true);
+}
+
+void Sound::play_next() {
+    
+    std::string nextSong;
+    bool accept_song;
+    std::vector<std::string>::iterator it;
+    
+    if(filelist.size() == playedFiles.size()) {
+        playedFiles.clear();
+    }
+    
+    do {
+        accept_song = true;
+        nextSong = filelist[rand() % filelist.size()];
+        for(it = playedFiles.begin(); it < playedFiles.end(); it++) {
+            if(*it == nextSong) {
+                accept_song = false;
+            }
+        }
+    } while(accept_song == false);
+    
+    filesystem::path track_dir(nextSong);
+    std::cout << "Playing: " << track_dir.filename() << std::endl;
+    play(nextSong.c_str());
+}
+
+void Sound::play_prev() {
+    
+    std::string nextSong;
+    if(playedFiles.size() > 1) {
+        nextSong = playedFiles[playedFiles.size() - 2];
+        //TODO: Is there a "better" way to do this?
+        std::string currentSong = playedFiles[playedFiles.size() - 1];
+        playedFiles.pop_back();
+        playedFiles.pop_back();
+        playedFiles.push_back(currentSong);
+    } else {
+        nextSong = playedFiles[0];
+        playedFiles.pop_back();
+    }
+    
+    filesystem::path track_dir(nextSong);
+    std::cout << "Playing: " << track_dir.filename() << std::endl;
+    play(nextSong.c_str());
 }
