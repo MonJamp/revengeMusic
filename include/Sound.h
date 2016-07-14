@@ -11,11 +11,11 @@ class Sound{
         ~Sound();
         
         bool init();
-        void createSound(const char* track_dir);
 
         bool isPlaying();
 
         void play();
+        void play(const char* track_dir);
         void pause();
         
     private:

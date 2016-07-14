@@ -41,11 +41,6 @@ bool Sound::init() {
     return true;
 }
 
-void Sound::createSound(const char *pFile) {
-    
-    m_pSystem->createStream(pFile, FMOD_DEFAULT, 0, &newSound);
-}
-
 bool Sound::isPlaying() {
     
     bool playing;
@@ -68,6 +63,13 @@ void Sound::play() {
         
         channel->setPaused(false);
     }
+}
+
+void Sound::play(const char* pFile) {
+    
+    newSound->release();
+    m_pSystem->createStream(pFile, FMOD_DEFAULT, 0, &newSound);
+    m_pSystem->playSound(newSound, 0, false, &channel);
 }
 
 void Sound::pause() {
