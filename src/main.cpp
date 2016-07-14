@@ -123,6 +123,9 @@ int main( int argc, char *argv[]) {
             } else if(msg == "prev") {
                 std::cout << "Previous" << std::endl;
                 song.play_prev();
+            } else if (msg == "shuffle") {
+                std::cout << "Toggle Shuffle" << std::endl;
+                song.setMode(SHUFFLE);
             }
             
         }

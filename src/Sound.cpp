@@ -12,13 +12,18 @@
 
 using namespace boost;
 
-Sound::Sound(const char* music_dir) {
+Sound::Sound(const char* music_dir, int flags) {
     
     channel = nullptr;
     newSound = nullptr;
     m_pSystem = nullptr;
     
     srand(time(NULL));
+    
+    //initial options
+    mode.loop_file  = (LOOP_FILE & flags);
+    mode.shuffle    = (SHUFFLE & flags);
+    
     getFileList(music_dir);
 }
 
@@ -90,6 +95,19 @@ bool Sound::isPlaying() {
     return playing;
 }
 
+void Sound::setMode(int flags) {
+    //toggle options
+    if(LOOP_FILE & flags)   mode.loop_file  = !mode.loop_file;
+    if(SHUFFLE & flags)     mode.shuffle    = !mode.shuffle;
+    
+    std::cout << "Loop File: " << mode.loop_file << std::endl;
+    std::cout << "Shuffle: " << mode.shuffle << std::endl;
+}
+
+std::string Sound::getCurrentSong() {
+    return playedFiles[playedFiles.size() - 1];
+}
+
 void Sound::play() {
     
     FMOD::Sound *currentSound;
@@ -133,7 +151,32 @@ void Sound::play_next() {
     
     do {
         accept_song = true;
-        nextSong = filelist[rand() % filelist.size()];
+        
+        if(mode.shuffle) {
+            nextSong = filelist[rand() % filelist.size()];
+        }
+        //Non-shuffle order is based on how boost reads the directory
+        //how to change the order is not known
+        else {
+            for(it = filelist.begin(); it < filelist.end(); it++) {
+                int song_num = it - filelist.begin();
+                if(*it == this->getCurrentSong()) {
+                    if(song_num == filelist.size()) {
+                        song_num = 0;
+                    }
+                    nextSong = filelist[song_num + 1];
+                } else if(song_num > filelist.size()) {
+                    std::cerr << "Could not find next song!" << std::endl;
+                    song_num = 0;
+                    nextSong = filelist[song_num];
+                }
+            }
+        }
+        
+        if(nextSong == this->getCurrentSong() && filelist.size() > 1) {
+            accept_song = false;
+        }
+        
         for(it = playedFiles.begin(); it < playedFiles.end(); it++) {
             if(*it == nextSong) {
                 accept_song = false;
@@ -152,7 +195,7 @@ void Sound::play_prev() {
     if(playedFiles.size() > 1) {
         nextSong = playedFiles[playedFiles.size() - 2];
         //TODO: Is there a "better" way to do this?
-        std::string currentSong = playedFiles[playedFiles.size() - 1];
+        std::string currentSong = this->getCurrentSong();
         playedFiles.pop_back();
         playedFiles.pop_back();
         playedFiles.push_back(currentSong);
