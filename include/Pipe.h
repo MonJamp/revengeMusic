@@ -30,6 +30,8 @@ class Pipe{
     #ifdef _WIN32
       HANDLE mutexHandle;
       HANDLE pipeHandle;
+      OVERLAPPED pipe_info;
+      const int PIPE_TIMEOUT;
     #endif
     
     int pid_fd;

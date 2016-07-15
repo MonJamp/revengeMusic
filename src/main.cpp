@@ -68,14 +68,14 @@ int main( int argc, char *argv[]) {
                   return -1;
               }
           }
-          
+
           //It is assumed the music folder is in "$HOME/Music"
           //The default music folder can be set via "$HOME/.config/user-dirs.dirs"
           music_dir = home_dir;
           music_dir += "/Music/";
         #elif _WIN32
           //On Windows all default folders can be found via a function
-          PWSTR* home_dir_ptr =
+          PWSTR* music_dir_ptr =
             static_cast<PWSTR*>(CoTaskMemAlloc(sizeof(wchar_t)*MAX_PATH));
           wchar_t music_dir_buf[MAX_PATH];
           char char_buf[MAX_PATH];
@@ -83,35 +83,60 @@ int main( int argc, char *argv[]) {
               Logger::PrintError("Could not find music directory!");
               return -1;
           }
-          
+
           wcscpy(music_dir_buf,*music_dir_ptr);
           CoTaskMemFree(music_dir_ptr);
           wcstombs(char_buf,music_dir_buf,MAX_PATH);
-          
+
           music_dir = char_buf;
           music_dir += "/";
         #endif
-        
+
         track_dir += music_dir;
         track_dir += track_name;
 
-        Sound song;
+        Sound song(music_dir.c_str());
+        song.init();
         std::cout << "Playing file: " << track_name << std::endl;
-        song.createSound(track_dir.c_str());
-        song.playSound(false);
+        song.play(track_dir.c_str());
 
         std::string msg;
         bool running = true;
 
-        while(song.isPlaying() && running) {
-            //GetMessage() is blocking which might need to be changed
+        while(running) {
+
             msg = pipe.GetMessage();
 
+            if(!song.isPlaying()) {
+                song.play_next();
+            }
+
             //Events
-            if(msg == "kill") {
+            if(msg == "none") {
+                continue;
+            } else if(msg == "kill") {
                 std::cout << "Killed!" << std::endl;
                 running = false;
+            } else if(msg == "play") {
+                std::cout << "Play" << std::endl;
+                song.play();
+            } else if(msg == "pause") {
+                std::cout << "Pause" << std::endl;
+                song.pause();
+            } else if(msg == "next") {
+                std::cout << "Next" << std::endl;
+                song.play_next();
+            } else if(msg == "prev") {
+                std::cout << "Previous" << std::endl;
+                song.play_prev();
+            } else if(msg == "shuffle") {
+                std::cout << "Toggle Shuffle" << std::endl;
+                song.setMode(SHUFFLE);
+            } else if(msg == "loop-file") {
+                std::cout << "Toggle File Loop" << std::endl;
+                song.setMode(LOOP_FILE);
             }
+
         }
 
         std::cout << track_name << " stopped, closing." << std::endl;
