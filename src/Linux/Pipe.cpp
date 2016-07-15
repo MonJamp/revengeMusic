@@ -47,14 +47,28 @@ void Pipe::SendMessage(const char* msg) {
 
 std::string Pipe::GetMessage() {
     
-    int fd = open(fifo, O_RDONLY);
-    read(fd, message, MAX_BUF);
-    close(fd);
+    
+    fd_set set;
+    struct timeval tv;
+    
+    int fd = open(fifo, O_RDONLY | O_NONBLOCK);
+    
+    FD_ZERO(&set);
+    FD_SET(fd, &set);
+    
+    tv.tv_sec = 0;
+    tv.tv_usec = 16666;
+    
+    //Check if anything is read to pipe for 16.666ms (1/60th second)
+    int status = select(fd + 1, &set, NULL, NULL, &tv);
 
-    if(message[0] != '\0'){
+    if(status > 0) {
+        read(fd, message, MAX_BUF);
+        close(fd);
         return std::string(message);
-    } else {
-        std::cout << "cannot read from write only fifo." << std::endl;
+    }
+    else {
+        close(fd);
         return "none";
     }
 }
