@@ -17,7 +17,7 @@ best case scenario is to mod rofi to play music files
       - Install the 'low level' libraries to `/usr/lib/`
     - **For Windows**
       - FMOD has it's own installer, nothing needs to be done manually
-  - [CMake](https://cmake.org/download/) (recommended)
+  - [CMake 3.4](https://cmake.org/download/) (recommended)
 
 ## Compiling
   - **For Linux**
@@ -27,9 +27,16 @@ best case scenario is to mod rofi to play music files
     - Run `build.cmd`
     - Move a copy of fmod.dll from the FMOD install folder into `revengeMusic/build/Debug/`
 
-## Usage
+# Usage
 ```
 ./revengeMusic (--commands | <path>)
     commands:
         -h, --help      Shows this message
+        kill            Exits revengeMusic
+        play            Unpause song
+        pause           Pause song
+        next            Play next song, next song is decided based on whether shuffle toggled on/off
+        prev            Play previous song
+        shuffle         Toggles shuffle on/off
+        loop-file       Loops the current song
 ```
