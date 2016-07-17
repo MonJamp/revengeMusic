@@ -8,6 +8,7 @@ ELSE()
 ENDIF()
 
 project (revengeMusic)
+set (projectVersion 1.0.0)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/")
 
@@ -35,6 +36,12 @@ add_executable(
   src/Sound.cpp
   src/Logger.cpp
 )
+
+add_custom_target (
+    deb
+    COMMAND ${CMAKE_SOURCE_DIR}/packages/debian/build-deb.sh ${projectVersion}
+)
+
 ENDIF(WIN32)
 
 #Find Boost
@@ -50,3 +57,5 @@ IF(FMOD_FOUND)
   include_directories(${FMOD_INCLUDE_DIRS})
   target_link_libraries(revengeMusic  ${FMOD_LIBRARIES})
 ENDIF(FMOD_FOUND)
+
+
