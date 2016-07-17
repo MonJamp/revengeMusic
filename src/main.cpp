@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstring>
 
 //standard unix headers, need this to get present working directory
 #ifdef __unix
