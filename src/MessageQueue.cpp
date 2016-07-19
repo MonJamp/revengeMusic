@@ -2,6 +2,7 @@
 
 #include <boost/interprocess/detail/os_file_functions.hpp>
 #include <boost/interprocess/ipc/message_queue.hpp>
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 #include <iostream>
 #include <string>
@@ -101,7 +102,7 @@ bool MessageQueue::GetMessage(std::string& msg, message_queue::size_type recvd_s
 
 bool MessageQueue::SendMessage(const char* msg) {
     try {
-        queue->send(msg, std::strlen(msg), 0);
+        queue->send(msg, std::strlen(msg)+1, 0);
     }
     catch(interprocess_exception &ex) {
         message_queue::remove(queue_name);
