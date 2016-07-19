@@ -7,7 +7,7 @@ ELSE()
   ENDIF()
 ENDIF()
 
-project (revengeMusic)
+project (revengeMusic CXX)
 set (projectVersion 1.0.0)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/")
@@ -18,26 +18,19 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
 
-IF(WIN32)
-add_executable(
-  revengeMusic
-  src/main.cpp
-  src/Windows/Pipe.cpp
-  src/Sound.cpp
-  src/Logger.cpp
-)
-set(Boost_USE_STATIC_LIBS ON)
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "revengeMusic")
-ELSEIF(UNIX)
-add_executable(
-  revengeMusic
-  src/main.cpp
-  src/Linux/Pipe.cpp
-  src/Sound.cpp
-  src/Logger.cpp
-)
 
-add_custom_target (
+add_executable(
+  revengeMusic
+  src/main.cpp
+  src/MessageQueue.cpp
+  src/Sound.cpp
+  src/Logger.cpp
+)
+IF(WIN32)
+  set(Boost_USE_STATIC_LIBS ON)
+  set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "revengeMusic")
+ELSEIF(UNIX)
+  add_custom_target (
     deb
     COMMAND ${CMAKE_SOURCE_DIR}/packages/debian/build-deb.sh ${projectVersion}
 )
@@ -45,11 +38,25 @@ add_custom_target (
 ENDIF(WIN32)
 
 #Find Boost
-find_package(Boost 1.58 COMPONENTS filesystem REQUIRED)
+find_package(Boost 1.58 COMPONENTS system filesystem date_time REQUIRED)
 IF(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   target_link_libraries(revengeMusic ${Boost_LIBRARIES})
 ENDIF(Boost_FOUND)
+
+#Find pthreads
+find_package(Threads)
+IF(Threads_FOUND)
+  target_link_libraries(revengeMusic ${CMAKE_THREAD_LIBS_INIT})
+ENDIF(Threads_FOUND)
+
+IF(UNIX)
+    #Find LibRt
+    find_package(LibRt)
+    IF(LIBRT_FOUND)
+      target_link_libraries(revengeMusic ${LIBRT_LIBRARIES})
+    ENDIF(LIBRT_FOUND)
+ENDIF(UNIX)
 
 #Find FMOD
 find_package(FMOD)
