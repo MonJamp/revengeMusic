@@ -4,6 +4,7 @@
 #include <boost/interprocess/ipc/message_queue.hpp>
 
 #include <string>
+#include <sstream>
 
 using namespace boost::interprocess;
 
@@ -29,8 +30,8 @@ class MessageQueue {
         const char*         queue_name;
         
         struct {
-            std::string     name;
-            file_handle_t   handle;
-            bool            acquired;
+            std::stringstream   file;
+            file_handle_t       handle;
+            bool                acquired;
         } flock;
 };
