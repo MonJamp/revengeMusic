@@ -21,6 +21,8 @@
   #include <Knownfolders.h>
   #include <Shlobj.h>
   #include <cwchar>
+  #undef GetMessage
+  #undef SendMessage
 #else
   #ERROR "Incompatible OS"
 #endif
