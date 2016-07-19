@@ -43,7 +43,7 @@ int main( int argc, char *argv[]) {
       SysError::Log();
     #endif
 
-    MessageQueue mq("fifo", MAX_MESSAGES, MAX_MESSAGE_BYTES);
+    MessageQueue mq("revengeMusic", MAX_MESSAGES, MAX_MESSAGE_BYTES);
 
     if(!mq.is_only_instance()) {
         if(argv[1] == NULL) {
