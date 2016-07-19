@@ -1,5 +1,5 @@
 #include "Sound.h"
-#include "Pipe.h"
+#include "MessageQueue.h"
 #include "Logger.h"
 
 #include <fmod.hpp>
@@ -21,9 +21,15 @@
   #include <Knownfolders.h>
   #include <Shlobj.h>
   #include <cwchar>
+  #undef GetMessage
+  #undef SendMessage
 #else
   #ERROR "Incompatible OS"
 #endif
+
+#define MAX_MESSAGES 2
+#define MAX_MESSAGE_BYTES 128
+
 
 int main( int argc, char *argv[]) {
 
@@ -37,17 +43,17 @@ int main( int argc, char *argv[]) {
       SysError::Log();
     #endif
 
-    Pipe pipe("/tmp/fifo");
+    MessageQueue mq("revengeMusic", MAX_MESSAGES, MAX_MESSAGE_BYTES);
 
-    if(!pipe.isOnlyInstance()) {
+    if(!mq.is_only_instance()) {
         if(argv[1] == NULL) {
-            pipe.SendMessage("kill");
+            mq.SendMessage("kill");
             return 0;
         } else {
-            pipe.SendMessage(argv[1]);
+            mq.SendMessage(argv[1]);
             return 0;
         }
-    } else if(pipe.isOnlyInstance()) {
+    } else if(mq.is_only_instance()) {
 
         if(argc < 1) {
             std::cerr << "Error, missing arguments." << std::endl;
@@ -125,38 +131,39 @@ int main( int argc, char *argv[]) {
 
         while(running) {
 
-            msg = pipe.GetMessage();
-
             if(!song.isPlaying()) {
                 song.play_next();
             }
+            
+            if(mq.GetMessage(msg)) {
 
-            //Events
-            if(msg == "none") {
-                continue;
-            } else if(msg == "kill") {
-                std::cout << "Killed!" << std::endl;
-                running = false;
-            } else if(msg == "play") {
-                std::cout << "Play" << std::endl;
-                song.play();
-            } else if(msg == "pause") {
-                std::cout << "Pause" << std::endl;
-                song.pause();
-            } else if(msg == "next") {
-                std::cout << "Next" << std::endl;
-                song.play_next();
-            } else if(msg == "prev") {
-                std::cout << "Previous" << std::endl;
-                song.play_prev();
-            } else if(msg == "shuffle") {
-                std::cout << "Toggle Shuffle" << std::endl;
-                song.setMode(SHUFFLE);
-            } else if(msg == "loop-file") {
-                std::cout << "Toggle File Loop" << std::endl;
-                song.setMode(LOOP_FILE);
+                //Events
+                if(msg == "none") {
+                    continue;
+                } else if(msg == "kill") {
+                    std::cout << "Killed!" << std::endl;
+                    running = false;
+                } else if(msg == "play") {
+                    std::cout << "Play" << std::endl;
+                    song.play();
+                } else if(msg == "pause") {
+                    std::cout << "Pause" << std::endl;
+                    song.pause();
+                } else if(msg == "next") {
+                    std::cout << "Next" << std::endl;
+                    song.play_next();
+                } else if(msg == "prev") {
+                    std::cout << "Previous" << std::endl;
+                    song.play_prev();
+                } else if(msg == "shuffle") {
+                    std::cout << "Toggle Shuffle" << std::endl;
+                    song.setMode(SHUFFLE);
+                } else if(msg == "loop-file") {
+                    std::cout << "Toggle File Loop" << std::endl;
+                    song.setMode(LOOP_FILE);
+                }
+            
             }
-
         }
 
         std::cout << track_name << " stopped, closing." << std::endl;
