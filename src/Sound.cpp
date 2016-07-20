@@ -168,6 +168,7 @@ void Sound::play_next() {
                 int song_num = it - filelist.begin();
                 if(*it == this->getCurrentSong()) {
                     if(song_num == filelist.size()-1) {
+                        playedFiles.clear();
                         song_num = 0;
                     }
                     nextSong = filelist[song_num + 1];
