@@ -54,6 +54,7 @@ MessageQueue::~MessageQueue() {
         message_queue::remove(queue_name);
         ipcdetail::delete_file(flock.file.str().c_str());
     }
+    delete(queue);
 }
 
 bool MessageQueue::is_only_instance() {
