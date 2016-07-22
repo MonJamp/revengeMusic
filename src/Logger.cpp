@@ -76,13 +76,13 @@ namespace Logger {
     }
     
     void SetLog(bool logging) {
-		if(logging) {
-			freopen("error.txt", "w", stderr);
+        if(logging) {
+            freopen("error.txt", "w", stderr);
             freopen("log.txt", "w", stdout);
-		}
-		else {
-			fclose(stderr);
+        }
+        else {
+            fclose(stderr);
             fclose(stdout);
-		}
+        }
     }
 }
