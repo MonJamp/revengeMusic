@@ -40,7 +40,7 @@ int main( int argc, char *argv[]) {
     #endif
 
     #ifdef RELEASE
-      SysError::Log();
+      SysError::SetLog(true);
     #endif
 
     MessageQueue mq("revengeMusic", MAX_MESSAGES, MAX_MESSAGE_BYTES);
