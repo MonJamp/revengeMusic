@@ -130,6 +130,16 @@ int main( int argc, char *argv[]) {
         bool running = true;
 
         while(running) {
+            
+            if(Logger::error_set) {
+                if(Logger::error_type == ErrorType::Fatal) {
+                    std::cout << "A fatal error has occured,"
+                              << "terminating program!" << std::endl;
+                    return 1;
+                } else {
+                    Logger::error_set = false;
+                }
+            }
 
             if(!song.isPlaying()) {
                 song.play_next();

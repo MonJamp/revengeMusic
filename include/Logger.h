@@ -6,6 +6,12 @@
 #include <sstream>
 
 
+enum ErrorType {
+    None,
+    Recoverable,
+    Fatal
+};
+
 namespace Logger {
     void SetError(std::string msg);
     //PrintError can also set errors
@@ -16,5 +22,6 @@ namespace Logger {
     
     extern std::stringstream error_msg;
     extern bool error_set;
+    extern ErrorType error_type;
 	extern bool logging;
 }
