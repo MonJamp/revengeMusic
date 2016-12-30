@@ -108,7 +108,8 @@ int main( int argc, char *argv[]) {
               //Get home directory if it is not defined in the environment variable
               home_dir = getpwuid(getuid())->pw_dir;
               if(home_dir == NULL) {
-                  Logger::PrintError("Could not find home directory!");
+                  Logger::Error error(Fatal, "Could not find home directory!");
+                  Logger::PrintError(error);
                   return -1;
               }
           }
@@ -152,7 +153,7 @@ int main( int argc, char *argv[]) {
         while(running) {
 
             if(Logger::error_set) {
-                if(Logger::error_type == ErrorType::Fatal) {
+                if(Logger::last_error.type == ErrorType::Fatal) {
                     std::cout << "A fatal error has occured,"
                               << "terminating program!" << std::endl;
                     return 1;
