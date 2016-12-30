@@ -84,7 +84,16 @@ namespace Logger {
 
         std::cerr << error.msg.str() << "\n" << "\tError: " << ex.what() << std::endl;
     }
-    
+
+    void PrintError(boost::filesystem::filesystem_error &ex, Logger::Error error) {
+        if(error_set == false) {
+            error_set = true;
+            last_error = error;
+        }
+
+        std::cerr << error.msg.str() << "\n" << "\tError: " << ex.what() << std::endl;
+    }
+
     void SetLog(bool logging) {
         if(logging) {
             freopen("error.txt", "w", stderr);
