@@ -44,7 +44,6 @@ MessageQueue::MessageQueue(const char* queue_name, int max_messages, int buffer_
                     );
         }
     } catch(interprocess_exception &ex) {
-        message_queue::remove(queue_name);
         Logger::PrintError(ex, "Failed to create MessageQueue!");
     }
 }
@@ -79,7 +78,6 @@ bool MessageQueue::GetMessage(std::string& msg, int timeout_ms) {
         }
     }
     catch(interprocess_exception &ex) {
-        message_queue::remove(queue_name);
         Logger::PrintError(ex, "Could not receive message!");
         return false;
     }
@@ -99,7 +97,6 @@ bool MessageQueue::GetMessage(std::string& msg, message_queue::size_type recvd_s
         }
     }
     catch(interprocess_exception &ex) {
-        message_queue::remove(queue_name);
         Logger::PrintError(ex, "Could not receive message!");
         return false;
     }
@@ -110,7 +107,6 @@ bool MessageQueue::SendMessage(const char* msg) {
         queue->send(msg, std::strlen(msg)+1, 0);
     }
     catch(interprocess_exception &ex) {
-        message_queue::remove(queue_name);
         Logger::PrintError(ex, "Could not send message!");
     }
     return true;
