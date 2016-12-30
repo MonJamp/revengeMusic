@@ -1,5 +1,7 @@
 #include "Logger.h"
 
+#include <boost/interprocess/exceptions.hpp>
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -11,6 +13,7 @@
 #elif _WIN32
     #include <windows.h>
 #endif
+
 
 static std::string LastErrorToString() {
     #ifdef __unix
@@ -67,14 +70,18 @@ namespace Logger {
         std::cerr << error_msg.str() << std::endl;
     }
     
+    void PrintError(boost::interprocess::interprocess_exception &ex, std::string msg) {
+        std::cerr << msg << "\n" << "\tError: " << ex.what() << std::endl;
+    }
+    
     void Log() {
-		if(!logging) {
-			logging = true;
-			freopen("error.txt", "w", stderr);
-		}
-		else {
-			logging = false;
-			fclose(stderr);
-		}
+        if(!logging) {
+            logging = true;
+            freopen("error.txt", "w", stderr);
+        }
+        else {
+            logging = false;
+            fclose(stderr);
+        }
     }
 }
