@@ -5,6 +5,13 @@
 #include <string>
 #include <sstream>
 
+
+enum ErrorType {
+    None,
+    Recoverable,
+    Fatal
+};
+
 namespace Logger {
     void SetError(std::string msg);
     void PrintError(std::string msg = "Unknown"); //Can also set errors
@@ -14,5 +21,6 @@ namespace Logger {
     
     extern std::stringstream error_msg;
     extern bool error_set;
+    extern ErrorType error_type;
     extern bool logging;
 }
