@@ -31,10 +31,10 @@ namespace Logger {
 
         Error() {
             type = Unknown;
-            msg.str("Unknown");
+            msg.str();
         }
 
-        Error(ErrorType type, std::string msg = "Unknown") {
+        Error(ErrorType type, std::string msg = "") {
             this->type = type;
             this->msg.str(msg);
         }
