@@ -74,14 +74,14 @@ namespace Logger {
         std::cerr << msg << "\n" << "\tError: " << ex.what() << std::endl;
     }
     
-    void Log() {
-        if(!logging) {
-            logging = true;
+    void SetLog(bool logging) {
+        if(logging) {
             freopen("error.txt", "w", stderr);
+            freopen("log.txt", "w", stdout);
         }
         else {
-            logging = false;
             fclose(stderr);
+            fclose(stdout);
         }
     }
 }
