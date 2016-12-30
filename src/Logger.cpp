@@ -56,6 +56,7 @@ static std::string LastErrorToString() {
 namespace Logger {
     std::stringstream error_msg;
     bool error_set = false;
+    ErrorType error_type = None;
 	bool logging = false;
 
     void SetError(std::string msg) {
