@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/interprocess/exceptions.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include <string>
 #include <sstream>
@@ -19,6 +20,7 @@ namespace Logger {
     void SetError(Logger::Error& error);
     void PrintError(Logger::Error error);
     void PrintError(boost::interprocess::interprocess_exception &ex, Logger::Error error);
+    void PrintError(boost::filesystem::filesystem_error &ex, Logger::Error error);
 
     void SetLog(bool logging); //Toggles redirecting error messages to log file
     
