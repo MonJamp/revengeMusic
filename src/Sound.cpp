@@ -55,19 +55,19 @@ void Sound::getFileList(const char* music_dir) {
                 }
             } else {
                 Logger::Error error;
-                error.type = Fatal;
+                error.type = ErrorType::Fatal;
                 error.msg << dir << " is not supported or corrupt";
                 Logger::PrintError(error);
             }
         } else {
             Logger::Error error;
-            error.type = Fatal;
+            error.type = ErrorType::Fatal;
             error.msg << dir << " does not exist";
             Logger::PrintError(error);
         }
     }
     catch(filesystem::filesystem_error &ex) {
-        Logger::Error error(Fatal, "Failed to get list of tracks!");
+        Logger::Error error(ErrorType::Fatal, "Failed to get list of tracks!");
         Logger::PrintError(ex, error);
     }
 }
@@ -75,8 +75,8 @@ void Sound::getFileList(const char* music_dir) {
 bool Sound::init() {
     
     if(FMOD::System_Create(&m_pSystem) != FMOD_OK) {
-        Logger::Error error(Fatal, "Could not create sound system!");
-        Logger::PrintError(ex, error);
+        Logger::Error error(ErrorType::Fatal, "Could not create sound system!");
+        Logger::PrintError(error);
         return false;
     }
     
@@ -84,8 +84,8 @@ bool Sound::init() {
     m_pSystem->getNumDrivers(&driverCount);
     
     if(driverCount == 0) {
-        Logger::Error error(Fatal, "No sound drivers found!");
-        Logger::PrintError(ex, error);
+        Logger::Error error(ErrorType::Fatal, "No sound drivers found!");
+        Logger::PrintError(error);
         return false;
     }
     
@@ -180,8 +180,8 @@ void Sound::play_next() {
                     }
                     nextSong = filelist[song_num + 1];
                 } else if(song_num > filelist.size()) {
-                    Logger::Error error(Recoverable, "Could not find next song!");
-                    Logger::PrintError(ex, error);
+                    Logger::Error error(ErrorType::Recoverable, "Could not find next song!");
+                    Logger::PrintError(error);
                     song_num = 0;
                     nextSong = filelist[song_num];
                 }

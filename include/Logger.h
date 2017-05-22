@@ -7,7 +7,7 @@
 #include <sstream>
 
 
-enum ErrorType {
+enum class ErrorType {
     None,
     Unknown,
     Recoverable,
@@ -32,7 +32,7 @@ namespace Logger {
         std::stringstream msg;
 
         Error() {
-            type = Unknown;
+            type = ErrorType::Unknown;
             msg.str();
         }
 
