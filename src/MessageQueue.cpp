@@ -20,11 +20,10 @@ MessageQueue::MessageQueue(const char* queue_name, int max_messages, int buffer_
     this->buffer_size = buffer_size;
     buffer = (char*) std::malloc(buffer_size);
     
-	flock.file = filesystem::temp_directory_path();
+    flock.file = filesystem::temp_directory_path();
     flock.file /= queue_name;
     flock.file.replace_extension(".lock");
-
-	flock.handle = ipcdetail::create_or_open_file(flock.file.string().c_str(), read_write);
+    flock.handle = ipcdetail::create_or_open_file(flock.file.string().c_str(), read_write);
 	
     ipcdetail::try_acquire_file_lock(flock.handle, flock.acquired);
     
