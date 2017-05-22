@@ -55,7 +55,7 @@ static std::string LastErrorToString() {
 
 namespace Logger {
     bool error_set = false;
-    Logger::Error last_error(None, "No Error");
+    Logger::Error last_error(ErrorType::None, "No Error");
 
     void SetError(Logger::Error& error) {
         error.msg << "\n\t" << LastErrorToString();
@@ -65,7 +65,7 @@ namespace Logger {
     }
     
     void PrintError(Logger::Error error = Logger::Error()) {
-        if(error.type == Unknown) {
+        if(error.type == ErrorType::Unknown) {
             SetError(error);
         }
         else if(error_set == false) {

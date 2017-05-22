@@ -15,7 +15,7 @@ include_directories("${CMAKE_SOURCE_DIR}/include/")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 IF(NOT WIN32)
   SET(GCC_COVERAGE_COMPILE_FLAGS "-std=c++11")
 ENDIF(NOT WIN32)
@@ -43,7 +43,7 @@ ENDIF(WIN32)
 #Find Boost
 find_package(Boost 1.58 COMPONENTS system filesystem date_time REQUIRED)
 IF(Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
+  include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
   target_link_libraries(revengeMusic ${Boost_LIBRARIES})
 ENDIF(Boost_FOUND)
 
@@ -64,7 +64,7 @@ ENDIF(UNIX)
 #Find FMOD
 find_package(FMOD)
 IF(FMOD_FOUND)
-  include_directories(${FMOD_INCLUDE_DIRS})
+  include_directories(SYSTEM ${FMOD_INCLUDE_DIRS})
   target_link_libraries(revengeMusic  ${FMOD_LIBRARIES})
 ENDIF(FMOD_FOUND)
 

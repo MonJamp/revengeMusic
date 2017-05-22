@@ -49,7 +49,7 @@ int main( int argc, char *argv[]) {
 
     if(!mq.is_only_instance()) {
         std::string msg;
-        if(argv[1] == NULL) {
+        if(strcmp(argv[1],"") == 0) {
             mq.SendMessage("kill");
         } else if(static_cast<std::string>(argv[1]) == "help") {
             msg =
@@ -108,7 +108,7 @@ int main( int argc, char *argv[]) {
               //Get home directory if it is not defined in the environment variable
               home_dir = getpwuid(getuid())->pw_dir;
               if(home_dir == NULL) {
-                  Logger::Error error(Fatal, "Could not find home directory!");
+                  Logger::Error error(ErrorType::Fatal, "Could not find home directory!");
                   Logger::PrintError(error);
                   return -1;
               }
@@ -125,7 +125,8 @@ int main( int argc, char *argv[]) {
           wchar_t music_dir_buf[MAX_PATH];
           char char_buf[MAX_PATH];
           if(SHGetKnownFolderPath(FOLDERID_Music,0,NULL,music_dir_ptr) != S_OK) {
-              Logger::PrintError("Could not find music directory!");
+              Logger::Error error(ErrorType::Fatal, "Could not find music directory!");
+              Logger::PrintError(error);
               return -1;
           }
 
