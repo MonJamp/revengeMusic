@@ -49,9 +49,15 @@ int main( int argc, char *argv[]) {
 
     if(!mq.is_only_instance()) {
         std::string msg;
+        std::string cmd;
+
         if(argc == 1) {
-            mq.SendMessage("kill");
-        } else if(static_cast<std::string>(argv[1]) == "help") {
+            cmd = "kill";
+        } else {
+            cmd = argv[1];
+        }
+
+        if(cmd == "-h" || cmd == "--help") {
             msg =
                 "\nUsage: revengeMusic (--commands | <path>)\n"
                 "\t-h, --help\tShows this message\n"
@@ -64,7 +70,7 @@ int main( int argc, char *argv[]) {
                 "\tshuffle\t\tToggles shuffle on/off\n"
                 "\tloop-file\tLoops the current song\n";
         } else {
-            mq.SendMessage(argv[1]);
+            mq.SendMessage(cmd.c_str());
             //Get message from player
             int timeout_ms = 16;
             mq.GetMessage(msg, timeout_ms);
