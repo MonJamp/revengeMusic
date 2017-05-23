@@ -89,12 +89,6 @@ int main( int argc, char *argv[]) {
         return 0;
 
     } else if(mq.is_only_instance()) {
-
-        if(argc < 1) {
-            std::cerr << "Error, missing arguments." << std::endl;
-            return -2;
-        }
-
         std::string music_dir;
         std::string track_dir;
         std::string track_name;
