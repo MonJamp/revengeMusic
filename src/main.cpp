@@ -45,6 +45,15 @@ int main( int argc, char *argv[]) {
       SysError::SetLog(true);
     #endif
 
+    std::string argv_str[argc];
+
+    //Store arguments in string
+    if(argc > 1) {
+        for(int i = 0; i < argc; ++i) {
+            argv_str[i] = argv[i];
+        }
+    }
+
     MessageQueue mq("revengeMusic", MAX_MESSAGES, MAX_MESSAGE_BYTES);
 
     if(!mq.is_only_instance()) {
@@ -54,7 +63,7 @@ int main( int argc, char *argv[]) {
         if(argc == 1) {
             cmd = "kill";
         } else {
-            cmd = argv[1];
+            cmd = argv_str[1];
         }
 
         if(cmd == "-h" || cmd == "--help") {
@@ -91,20 +100,19 @@ int main( int argc, char *argv[]) {
         std::string track_name;
         std::string subdirectory;
 
-		//Check command line arguments
-        for(int i = 1; i < argc; ++i)
-        {
-          if(strcmp(argv[i],"-subdir") == 0)
+        //Check command line arguments
+        for(int i = 1; i < argc; ++i) {
+          if(argv_str[i] == "-subdir")
           {
             ++i;
             if(i < argc)
             { 
-              subdirectory = argv[i]; 
+              subdirectory = argv_str[i];
               subdirectory += "/";
             }
           }
           else
-          { track_name = argv[i]; }
+          { track_name = argv_str[i]; }
         }
 
         //Get home directory of user
