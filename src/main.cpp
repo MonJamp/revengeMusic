@@ -96,17 +96,38 @@ int main( int argc, char *argv[]) {
 
         //Check command line arguments
         for(int i = 1; i < argc; ++i) {
-          if(argv_str[i] == "-subdir")
-          {
-            ++i;
-            if(i < argc)
-            { 
-              subdirectory = argv_str[i];
-              subdirectory += "/";
+            if(argv_str[i] == "-h" || argv_str[i] == "--help") {
+                //Show usage message and exit
+                std::string msg =
+                    "\nUsage: revengeMusic (--commands | <path>)\n"
+                    "\t-h, --help\tShows this message\n"
+                    "\t-subdir\t\tSpecify a specific folder"
+                        " within the Music directory\n"
+                    "\tkill\t\tExits revengeMusic\n"
+                    "\tplay\t\tUnpause song\n"
+                    "\tpause\t\tPause song\n"
+                    "\tnext\t\tPlay next song (based on shuffle)\n"
+                    "\tprev\t\tPlay previous song\n"
+                    "\tshuffle\t\tToggles shuffle on/off\n"
+                    "\tloop-file\tLoops the current song\n";
+
+                std::cout << msg << std::endl;
+
+                return 0;
             }
-          }
-          else
-          { track_name = argv_str[i]; }
+
+            if(argv_str[i] == "-subdir")
+            {
+                ++i;
+                if(i < argc)
+                {
+                  subdirectory = argv_str[i];
+                  subdirectory += "/";
+                }
+            }
+            else {
+                track_name = argv_str[i];
+            }
         }
 
         //Get home directory of user
