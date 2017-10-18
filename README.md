@@ -1,13 +1,13 @@
 # revengeMusic
 
-Written in C++
+(REVerseENGineerMUSIC) Written in C++
 
-A command line music program for linux,
-Designed not to play two tracks at once and to be easily used in shell programs, this way key shortcuts and option flags
-could allow a user to find a creative uses, I intend to release a gui mode and sound file search and create a music program with
-similar implementation to rofi.
+The aim of this project was to create a music program that would be safe to run from the command line on windows or
+linux. The user should be able to play a single track, file, playlist with key shortcuts or write a GUI program of their
+own to run it without running into the problems that other command line music programs run into when this is attempted.
 
-best case scenario is to mod rofi to play music files
+
+
 
 # Building
 ## Dependencies
